@@ -1,0 +1,6 @@
+{
+  "name": "Nomad Landing Page",
+  "description": "A premium gamified landing page for Nomad app.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
