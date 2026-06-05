@@ -9,56 +9,49 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section className="py-24 md:py-32 bg-nomad-ivory text-nomad-charcoal border-b border-nomad-charcoal/10 overflow-hidden relative">
-      <div className="max-w-4xl mx-auto px-4 md:px-6 relative z-10 w-full flex flex-col items-center">
+    <section className="py-24 md:py-32 bg-nomad-charcoal text-white border-b border-white/10 overflow-hidden relative">
+      <motion.div 
+        variants={{
+          hidden: { opacity: 0 },
+          show: { opacity: 1, transition: { staggerChildren: 0.2 } }
+        }}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-100px" }}
+        className="max-w-4xl mx-auto px-4 md:px-6 relative z-10 w-full flex flex-col items-center"
+      >
         
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
           className="mb-16 flex flex-col items-center justify-center text-center w-full"
         >
-          <div className="inline-block bg-white text-nomad-charcoal text-xs font-bold uppercase tracking-widest px-4 py-2 mb-6 border border-nomad-charcoal/10 shadow-sm rounded-full">
+          <div className="inline-block bg-white/5 text-white/70 text-xs font-bold uppercase tracking-widest px-4 py-2 mb-6 border border-white/10 shadow-sm rounded-full">
              Fast Integration
           </div>
-          <h2 className="text-[40px] md:text-[60px] lg:text-[80px] font-black font-display uppercase tracking-tighter text-nomad-charcoal leading-[0.9] mb-4">
-            FROM SETUP TO<br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-nomad-charcoal to-nomad-charcoal/60">CELEBRATION</span>
+          <h2 className="text-[28px] md:text-[36px] lg:text-[48px] font-black font-display uppercase tracking-[-0.02em] text-white leading-[1.1] mb-4 mt-2">
+            FROM SETUP TO <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/40">CELEBRATION</span>
           </h2>
-          <div className="text-sm md:text-base font-bold text-nomad-charcoal/60 mt-4 max-w-md">
+          <div className="text-sm md:text-base font-bold text-white/50 mt-4 max-w-md">
              In Minutes. Out of the box. No coding required.
           </div>
         </motion.div>
 
         <div className="w-full flex flex-col gap-4 relative">
-           
-           {/* Decorative floating circle like the '$102 / MONTH' sticker */}
-           <motion.div 
-             animate={{ y: [0, -10, 0], rotate: [0, 5, -5, 0] }}
-             transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-             className="hidden lg:flex absolute top-1/4 -right-24 w-32 h-32 rounded-full bg-nomad-green text-nomad-charcoal font-black flex-col items-center justify-center shadow-xl shadow-nomad-green/20 z-20 border-4 border-white"
-           >
-              <span className="text-[10px] uppercase tracking-widest font-bold opacity-70">Start in</span>
-              <span className="text-4xl leading-none -mt-1"><span className="text-2xl">$</span>0</span>
-           </motion.div>
-
           {steps.map((step, i) => (
             <motion.div 
               key={i}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+              variants={{ hidden: { opacity: 0, x: i % 2 === 0 ? -30 : 30 }, show: { opacity: 1, x: 0, transition: { duration: 0.6 } } }}
               whileHover={{ scale: 1.02 }}
-              className="w-full bg-[#111] text-white p-6 md:p-8 rounded-[2rem] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 overflow-hidden relative group cursor-pointer"
+              className="w-full bg-[#111] text-white p-6 md:p-8 rounded-[2rem] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 overflow-hidden relative group cursor-pointer border border-white/5"
             >
               <div className="absolute inset-0 bg-nomad-green/0 group-hover:bg-nomad-green/5 transition-colors duration-300" />
               
               <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-8 relative z-10 w-full">
-                <div className="text-4xl md:text-5xl font-black font-display text-white/10 group-hover:text-nomad-green transition-colors select-none">
+                <div className="text-4xl md:text-5xl font-black font-sans text-white/10 group-hover:text-nomad-green transition-colors select-none">
                   {step.num}
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl md:text-3xl font-display font-black uppercase tracking-widest text-white group-hover:text-nomad-green transition-colors mb-2">
+                  <h3 className="text-2xl md:text-3xl font-sans font-black uppercase tracking-widest text-white group-hover:text-nomad-green transition-colors mb-2">
                      {step.title}
                   </h3>
                   <div className="flex items-center gap-2 text-xs md:text-sm font-bold text-white/50 uppercase tracking-widest">
@@ -73,7 +66,7 @@ export default function HowItWorks() {
             </motion.div>
           ))}
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

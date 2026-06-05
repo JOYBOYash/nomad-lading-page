@@ -1,136 +1,123 @@
-import { motion, useScroll, useTransform } from 'motion/react';
-import { Gamepad2, RadioReceiver, SlidersHorizontal, MapPin, Coins } from 'lucide-react';
-import TiltCard from './TiltCard';
-import { useRef } from 'react';
+import { motion } from 'motion/react';
+import { Gamepad2, Radio, Box, ArrowLeft, ArrowRight } from 'lucide-react';
+import { useAppContext } from '../context/AppContext';
 
 export default function Difference() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-
-  const mapY = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const { playHover, setCursorVariant } = useAppContext();
 
   return (
-    <section ref={containerRef} className="py-24 md:py-32 bg-nomad-charcoal text-nomad-ivory overflow-hidden relative border-b border-white/5">
+    <section className="py-24 md:py-32 bg-[#171717] text-white">
       <motion.div 
-         className="absolute inset-[-50%] opacity-[0.03] pointer-events-none" 
-         style={{ backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)', backgroundSize: '32px 32px', y: mapY }} 
-      />
-
-      <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
+        variants={{
+          hidden: { opacity: 0 },
+          show: { opacity: 1, transition: { staggerChildren: 0.2 } }
+        }}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-100px" }}
+        className="max-w-[1400px] mx-auto px-6 w-full"
+      >
         
-        {/* Header mimicking "Facilities at Fitness" */}
+        {/* Header Section */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <motion.div
-             initial={{ opacity: 0, x: -30 }}
-             whileInView={{ opacity: 1, x: 0 }}
-             viewport={{ once: true }}
-             className="flex-1 max-w-2xl"
+             variants={{ hidden: { opacity: 0, x: -30 }, show: { opacity: 1, x: 0, transition: { duration: 0.6 } } }}
+             className="max-w-xl"
           >
-            <h2 className="text-[50px] md:text-[80px] font-black font-display uppercase leading-[0.85] tracking-tighter text-nomad-ivory mb-6">
+            <h2 className="text-[50px] md:text-[70px] font-black font-display uppercase leading-[0.9] tracking-[-0.03em] text-white mb-6">
               THE NOMAD <br className="hidden md:block"/> DIFFERENCE.
             </h2>
-            <p className="text-lg text-nomad-ivory/60 font-medium max-w-md">
+            <p className="text-[17px] text-[#9ca3af] font-medium leading-relaxed max-w-[420px]">
               Nomad fills the critical gap by combining gamification, rewards, and full organizer authority into a single ecosystem.
             </p>
           </motion.div>
           
           <motion.div 
-             initial={{ opacity: 0, scale: 0.8 }}
-             whileInView={{ opacity: 1, scale: 1 }}
-             viewport={{ once: true }}
-             className="flex items-center gap-4 shrink-0"
+             variants={{ hidden: { opacity: 0, scale: 0.8 }, show: { opacity: 1, scale: 1, transition: { duration: 0.6 } } }}
+             className="flex items-center gap-4 shrink-0 relative"
           >
-             <button className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white hover:bg-white/10 transition-colors">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+             {/* Decorative Green Dot */}
+             <div className="absolute -top-1 -left-2 w-3 h-3 rounded-full bg-nomad-green/60" />
+             
+             <button 
+               onMouseEnter={() => {playHover(); setCursorVariant('hover');}}
+               onMouseLeave={() => setCursorVariant('default')}
+               className="w-12 h-12 rounded-full border border-white/10 bg-transparent flex items-center justify-center text-white hover:bg-white/5 transition-colors cursor-none"
+             >
+                <ArrowLeft className="w-5 h-5" />
              </button>
-             <button className="w-20 h-20 rounded-full bg-nomad-green flex items-center justify-center text-nomad-charcoal hover:scale-105 hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+             <button 
+               onMouseEnter={() => {playHover(); setCursorVariant('hover');}}
+               onMouseLeave={() => setCursorVariant('default')}
+               className="w-16 h-16 rounded-full bg-nomad-green flex items-center justify-center text-[#111] hover:scale-105 transition-transform cursor-none shadow-[0_0_20px_rgba(34,197,94,0.3)]"
+             >
+                <ArrowRight className="w-6 h-6 stroke-[2.5px]" />
              </button>
           </motion.div>
         </div>
 
-        {/* The Magic Pillars Bento Grid */}
-        <div className="grid md:grid-cols-3 gap-6 auto-rows-[400px]">
+        {/* Cards Grid */}
+        <div className="grid md:grid-cols-3 gap-6 auto-rows-[420px]">
           
+          {/* Card 1: Token Rewards */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="h-full"
+            variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+            className="bg-[#1c1c1c] rounded-[2rem] p-10 flex flex-col items-center justify-center text-center group hover:-translate-y-2 transition-all duration-300 border border-transparent hover:border-white/5"
           >
-            <TiltCard className="p-8 bg-[#111] border border-white/5 rounded-[2rem] text-left h-full flex flex-col justify-between hover:border-white/20 transition-all group overflow-hidden relative">
-               <div className="w-full flex justify-center mb-8 relative z-10 pt-4">
-                 <div className="w-32 h-32 opacity-20 group-hover:opacity-100 group-hover:scale-110 group-hover:-translate-y-4 transition-all duration-500">
-                    <Gamepad2 className="w-full h-full text-white" />
-                 </div>
-               </div>
-               <div className="relative z-10 transition-transform duration-300 group-hover:-translate-y-2">
-                 <h3 className="text-3xl font-display font-black uppercase tracking-widest mb-3 text-white">Token Rewards</h3>
-                 <p className="text-nomad-ivory/50 text-sm font-medium leading-relaxed">Turn passive wandering into highly engaging quests and exclusive token rewards designed perfectly for your crowd.</p>
-                 <div className="mt-6 w-10 h-10 rounded-full bg-nomad-green flex flex-shrink-0 items-center justify-center text-nomad-charcoal opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                 </div>
-               </div>
-            </TiltCard>
+            <div className="mb-12 flex-1 flex items-center justify-center">
+               <Gamepad2 strokeWidth={1.5} className="w-32 h-32 text-[#404040] group-hover:text-white/80 transition-colors duration-500" />
+            </div>
+            <div>
+               <h3 className="text-2xl font-black font-sans uppercase tracking-widest mb-4 text-white">Token Rewards</h3>
+               <p className="text-[#a1a1aa] text-[15px] font-medium leading-relaxed max-w-[280px] mx-auto">
+                 Turn passive wandering into highly engaging quests and exclusive token rewards designed perfectly for your crowd.
+               </p>
+            </div>
           </motion.div>
 
+          {/* Card 2: Proximity */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="h-full"
+            variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+            className="bg-[#1c1c1c] rounded-[2rem] p-10 flex flex-col items-center justify-center text-center group hover:-translate-y-2 transition-all duration-300 border border-transparent hover:border-white/5"
           >
-            <TiltCard className="p-8 bg-[#111] border border-white/5 rounded-[2rem] text-left h-full flex flex-col justify-between hover:border-white/20 transition-all group overflow-hidden relative">
-               <div className="w-full flex justify-center mb-8 relative z-10 pt-4">
-                 <div className="w-32 h-32 opacity-20 group-hover:opacity-100 group-hover:scale-110 group-hover:-translate-y-4 transition-all duration-500">
-                    <RadioReceiver className="w-full h-full text-white" />
-                 </div>
-               </div>
-               <div className="relative z-10 transition-transform duration-300 group-hover:-translate-y-2">
-                 <h3 className="text-3xl font-display font-black uppercase tracking-widest mb-3 text-white">Proximity</h3>
-                 <p className="text-nomad-ivory/50 text-sm font-medium leading-relaxed">Smart missions trigger based on actual attendee locations, directing traffic to where you need it most.</p>
-                 <div className="mt-6 w-10 h-10 rounded-full bg-nomad-green flex flex-shrink-0 items-center justify-center text-nomad-charcoal opacity-0 group-hover:opacity-100 transition-opacity">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                 </div>
-               </div>
-            </TiltCard>
+            <div className="mb-12 flex-1 flex items-center justify-center">
+               <Radio strokeWidth={1.5} className="w-32 h-32 text-[#404040] group-hover:text-white/80 transition-colors duration-500" />
+            </div>
+            <div>
+               <h3 className="text-2xl font-black font-sans uppercase tracking-widest mb-4 text-white">Proximity</h3>
+               <p className="text-[#a1a1aa] text-[15px] font-medium leading-relaxed max-w-[280px] mx-auto">
+                 Smart missions trigger based on actual attendee locations, directing traffic to where you need it most.
+               </p>
+            </div>
           </motion.div>
 
+          {/* Card 3: Platform Authority */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="h-full"
+            variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
+            className="bg-[#1c1c1c] rounded-[2rem] p-10 flex flex-col justify-between group hover:-translate-y-2 transition-all duration-300 border border-transparent hover:border-white/5 relative"
           >
-            <TiltCard className="p-8 bg-[#111] border border-white/5 rounded-[2rem] text-left h-full flex flex-col justify-between hover:bg-white/5 hover:border-white/20 transition-all group overflow-hidden relative">
+            <div className="mt-4 mb-10 w-[60px] h-[60px] border border-white/10 rounded-2xl flex items-center justify-center bg-transparent group-hover:border-nomad-green/50 transition-colors">
+               <Box className="w-7 h-7 text-nomad-green" />
+            </div>
+            
+            <div className="mt-auto">
+               <h3 className="text-2xl font-black font-sans uppercase tracking-widest mb-4 text-white leading-tight">Platform <br/>Authority</h3>
+               <p className="text-[#a1a1aa] text-[15px] font-medium leading-relaxed mb-8">
+                 A powerful command center to spin up new engagement strategies, monitor heatmaps, and measure true sponsor ROI.
+               </p>
                
-               {/* Highlight styling to mimic the orange card */}
-               <div className="absolute top-0 right-0 p-6 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity">
-                 <SlidersHorizontal className="w-8 h-8 text-nomad-green" />
-               </div>
-
-               <div className="mt-auto relative z-10">
-                 <div className="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center text-nomad-green mb-6 group-hover:bg-nomad-green group-hover:text-nomad-charcoal transition-colors">
-                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                 </div>
-                 <h3 className="text-3xl font-display font-black uppercase tracking-widest mb-3 text-white">Platform Authority</h3>
-                 <p className="text-nomad-ivory/50 text-sm font-medium leading-relaxed mb-6">A powerful command center to spin up new engagement strategies, monitor heatmaps, and measure true sponsor ROI.</p>
-                 
-                 <button className="px-6 py-2 bg-white/10 text-white rounded-full text-xs font-bold uppercase tracking-widest group-hover:bg-nomad-green group-hover:text-nomad-charcoal transition-colors">
-                   Discover More
-                 </button>
-               </div>
-            </TiltCard>
+               <button 
+                 onMouseEnter={() => {playHover(); setCursorVariant('hover');}}
+                 onMouseLeave={() => setCursorVariant('default')}
+                 className="px-6 py-3 bg-[#262626] text-white rounded-full text-xs font-bold uppercase tracking-widest hover:bg-nomad-green hover:text-black transition-colors cursor-none w-max"
+               >
+                 Discover More
+               </button>
+            </div>
           </motion.div>
-        </div>
 
-      </div>
+        </div>
+      </motion.div>
     </section>
   );
 }

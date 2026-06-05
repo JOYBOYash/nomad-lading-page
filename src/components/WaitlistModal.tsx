@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { X, MapPin, ArrowDown } from 'lucide-react';
+import { useAppContext } from '../context/AppContext';
 
 interface WaitlistModalProps {
   isOpen: boolean;
@@ -9,6 +10,8 @@ interface WaitlistModalProps {
 }
 
 export default function WaitlistModal({ isOpen, onClose, onScrollToJoin, onNeverMind }: WaitlistModalProps) {
+  const { setCursorVariant } = useAppContext();
+  
   return (
     <AnimatePresence>
       {isOpen && (
@@ -54,9 +57,11 @@ export default function WaitlistModal({ isOpen, onClose, onScrollToJoin, onNever
 
                 <motion.button
                   onClick={onScrollToJoin}
+                  onMouseEnter={() => setCursorVariant('waitlist')}
+                  onMouseLeave={() => setCursorVariant('default')}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="w-full py-5 rounded-xl bg-nomad-green text-nomad-charcoal font-black text-lg uppercase tracking-widest hover:bg-nomad-ivory transition-colors shadow-[0_0_20px_rgba(34,197,94,0.3)] flex items-center justify-center gap-3 mb-4"
+                  className="w-full py-5 rounded-xl bg-[#FFD700] text-nomad-charcoal font-black text-lg uppercase tracking-widest transition-colors shadow-[0_0_20px_rgba(255,215,0,0.3)] flex items-center justify-center gap-3 mb-4 cursor-none"
                 >
                   JOIN WAITLIST <ArrowDown className="w-5 h-5" />
                 </motion.button>

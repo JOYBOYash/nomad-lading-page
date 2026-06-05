@@ -27,29 +27,34 @@ export default function Problem() {
 
   return (
     <section className="py-24 bg-nomad-charcoal text-nomad-ivory overflow-hidden relative">
-      <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
+      <motion.div 
+        variants={{
+          hidden: { opacity: 0 },
+          show: { opacity: 1, transition: { staggerChildren: 0.2 } }
+        }}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-100px" }}
+        className="max-w-7xl mx-auto px-6 relative z-10 w-full"
+      >
         
         {/* Header Section mimicking the reference */}
         <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start lg:items-end mb-16 border-b border-white/10 pb-12">
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
             className="flex-1"
           >
             <div className="text-sm font-bold uppercase tracking-widest text-nomad-ivory/60 mb-6">The Real Problem</div>
-            <h2 className="text-[60px] md:text-[80px] lg:text-[100px] font-display font-black uppercase tracking-tighter leading-[0.85] text-white">
-              EVENTS TODAY <br />
-              ARE <span className="text-nomad-charcoal bg-nomad-green px-2 relative inline-block -rotate-2 ml-2">STUCK</span> <br />
-              IN THE PAST
-            </h2>
+            <div className="flex items-center gap-4 lg:gap-8">
+              <h2 className="text-[40px] md:text-[50px] lg:text-[70px] xl:text-[80px] max-w-[800px] font-display font-black uppercase tracking-tighter leading-[0.9] text-white">
+                EVENTS TODAY ARE <span className="text-[#111] bg-nomad-green px-2 relative inline-block -rotate-2 mx-1 md:mx-2">STUCK</span> <br/>
+                IN THE PAST
+              </h2>
+            </div>
           </motion.div>
           
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
             className="max-w-sm flex shrink-0 flex-col items-start gap-6"
           >
             <p className="font-bold text-nomad-ivory/70 text-sm md:text-base leading-relaxed">
@@ -59,7 +64,7 @@ export default function Problem() {
               href="#solution"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-4 bg-nomad-green text-nomad-charcoal rounded-full font-black uppercase tracking-widest text-sm transition-all hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] whitespace-nowrap"
+              className="px-8 py-4 bg-[#FFD700] text-nomad-charcoal rounded-full font-black uppercase tracking-widest text-sm transition-all hover:shadow-[0_0_20px_rgba(255,215,0,0.4)] whitespace-nowrap"
             >
               See The Solution
             </motion.a>
@@ -71,9 +76,7 @@ export default function Problem() {
           
           {/* Card 1 - Small Left */}
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
             className="relative rounded-[2rem] overflow-hidden bg-[#111] group border border-white/5"
           >
             <img src="https://images.unsplash.com/photo-1511516172551-787db8c0be64?q=80&w=600&auto=format&fit=crop" alt="Boring Event" className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-overlay grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" />
@@ -82,16 +85,13 @@ export default function Problem() {
                <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center text-white border border-white/20">
                  <SmartphoneNfc className="w-6 h-6" />
                </div>
-               <h3 className="text-xl font-display font-black uppercase tracking-widest text-white">Scattered Apps</h3>
+               <h3 className="text-xl font-sans font-black uppercase tracking-widest text-white">Scattered Apps</h3>
             </div>
           </motion.div>
 
           {/* Card 2 - Large Center/Right */}
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
+            variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
             className="md:col-span-2 relative rounded-[2rem] overflow-hidden bg-[#111] group border border-white/5"
           >
             <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop" alt="Low Engagement" className="absolute inset-0 w-full h-full object-cover opacity-50 mix-blend-overlay grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" />
@@ -109,10 +109,7 @@ export default function Problem() {
 
           {/* Card 3 - Wide Bottom */}
           <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
             className="md:col-span-3 h-auto relative rounded-[2rem] overflow-hidden bg-[#111] border border-white/5 p-8 lg:p-12 flex flex-col md:flex-row items-center justify-between gap-8 group hover:border-white/20 transition-colors"
           >
              <div className="flex items-center gap-6">
@@ -132,7 +129,7 @@ export default function Problem() {
           </motion.div>
 
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

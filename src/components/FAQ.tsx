@@ -26,12 +26,19 @@ export default function FAQ() {
 
   return (
     <section className="py-24 md:py-32 bg-[#111] text-nomad-ivory overflow-hidden relative border-b border-white/5">
-      <div className="max-w-4xl mx-auto px-6 relative z-10 w-full">
+      <motion.div 
+        variants={{
+          hidden: { opacity: 0 },
+          show: { opacity: 1, transition: { staggerChildren: 0.15 } }
+        }}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-100px" }}
+        className="max-w-4xl mx-auto px-6 relative z-10 w-full"
+      >
         
         <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
           className="mb-16 flex flex-col items-center text-center"
         >
           <div className="inline-block bg-white/5 backdrop-blur-sm text-white/60 text-xs font-bold uppercase tracking-widest px-4 py-2 mb-6 border border-white/10 rounded-full">
@@ -46,17 +53,14 @@ export default function FAQ() {
           {faqs.map((faq, index) => (
             <motion.div 
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
               className="border border-white/10 rounded-2xl bg-[#1a1a1a] overflow-hidden"
             >
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 className="w-full px-6 py-6 flex items-center justify-between text-left focus:outline-none"
               >
-                <span className="font-display font-black uppercase tracking-widest text-lg md:text-xl text-white pr-4">
+                <span className="font-sans font-black uppercase tracking-widest text-lg md:text-xl text-white pr-4">
                   {faq.question}
                 </span>
                 <motion.div
@@ -86,7 +90,7 @@ export default function FAQ() {
           ))}
         </div>
         
-      </div>
+      </motion.div>
     </section>
   );
 }

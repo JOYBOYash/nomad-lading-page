@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { motion, useScroll } from 'motion/react';
-import { MapPin } from 'lucide-react';
 import Hero from './components/Hero';
 import Problem from './components/Problem';
 import Difference from './components/Difference';
@@ -11,11 +10,14 @@ import FAQ from './components/FAQ';
 import FooterCTA from './components/FooterCTA';
 import Footer from './components/Footer';
 import WaitlistModal from './components/WaitlistModal';
+import { AppProvider, useAppContext } from './context/AppContext';
+import CustomCursor from './components/CustomCursor';
 
-export default function App() {
+function MainApp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userDismissedModal, setUserDismissedModal] = useState(false);
   const { scrollYProgress } = useScroll();
+  const { isSoundEnabled, toggleSound, setCursorVariant } = useAppContext();
 
   const scrollToWaitlist = () => {
     setIsModalOpen(false);
@@ -41,40 +43,23 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-nomad-charcoal text-nomad-ivory font-sans selection:bg-nomad-green selection:text-nomad-charcoal">
+      <CustomCursor />
       
       {/* Scroll Progress Bar */}
       <motion.div 
         className="fixed top-0 left-0 right-0 h-1 bg-nomad-green z-[100] origin-left"
         style={{ scaleX: scrollYProgress }}
       />
-      
-      {/* Sticky Header */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-nomad-charcoal/90 backdrop-blur-md border-b border-white/10 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <img src="https://www.dropbox.com/scl/fi/eez8in6tuf5mgf3b4scz1/Nomad.svg?rlkey=6x9d65a0tljcelq7n6gmiy9px&st=g0vfrzvp&raw=1" alt="Nomad Logo" className="h-6 filter brightness-0 invert" style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(50%) saturate(579%) hue-rotate(63deg) brightness(98%) contrast(93%)' }} />
-            <span className="text-3xl font-display font-black tracking-tighter text-nomad-ivory uppercase">Nomad</span>
-          </div>
-          <motion.button 
-            onClick={scrollToWaitlist}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-6 py-2.5 rounded-full bg-nomad-green text-sm md:text-md font-bold text-nomad-charcoal shadow-sm hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] transition-all hidden sm:block uppercase tracking-wider"
-          >
-            Join Waitlist
-          </motion.button>
-        </div>
-      </header>
 
       <main>
-        <Hero onJoinWaitlist={scrollToWaitlist} openModal={() => setIsModalOpen(true)} />
-        <Problem />
-        <Difference />
-        <Features />
-        <HowItWorks />
-        <SocialProof />
-        <FAQ />
-        <FooterCTA />
+        <section id="home"><Hero onJoinWaitlist={scrollToWaitlist} /></section>
+        <section id="problem"><Problem /></section>
+        <section id="difference"><Difference /></section>
+        <section id="features"><Features /></section>
+        <section id="how-it-works"><HowItWorks /></section>
+        <section id="wall-of-fame"><SocialProof /></section>
+        <section id="faq"><FAQ /></section>
+        <section id="waitlist"><FooterCTA /></section>
       </main>
 
       <Footer />
@@ -100,5 +85,13 @@ export default function App() {
         </motion.button>
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <AppProvider>
+      <MainApp />
+    </AppProvider>
   );
 }

@@ -1,0 +1,16 @@
+{
+  "images": {
+    "logo": "https://www.dropbox.com/scl/fi/eez8in6tuf5mgf3b4scz1/Nomad.svg?rlkey=6x9d65a0tljcelq7n6gmiy9px&st=g0vfrzvp&raw=1",
+    "videoThumbnail": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=400&h=300&fit=crop"
+  },
+  "videos": {
+    "heroBackground": "https://www.dropbox.com/scl/fi/hv49sah9wr0div4z054v2/hero2.mp4?rlkey=wyzc7t3q3674q19ta5fmfzkx1&st=ol4yfb20&raw=1",
+    "demoVideo": "https://www.dropbox.com/scl/fi/hv49sah9wr0div4z054v2/hero2.mp4?rlkey=wyzc7t3q3674q19ta5fmfzkx1&st=ol4yfb20&raw=1"
+  },
+  "socials": {
+    "twitter": "#",
+    "linkedin": "#",
+    "instagram": "#",
+    "discord": "#"
+  }
+}
