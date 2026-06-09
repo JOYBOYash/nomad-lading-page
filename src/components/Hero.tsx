@@ -12,7 +12,7 @@ function scrollToSection(id: string) {
   if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
-function NavPanelContent({ handleJoin, setCursorVariant, setShowVideo, activeSection, isSoundEnabled, toggleSound }: any) {
+function NavPanelContent({ handleJoin, setCursorVariant, activeSection, isSoundEnabled, toggleSound }: any) {
   const sections = [
     { id: 'home', label: 'HOME' },
     { id: 'problem', label: 'THE PROBLEM' },
@@ -32,7 +32,7 @@ function NavPanelContent({ handleJoin, setCursorVariant, setShowVideo, activeSec
         </div>
       </div>
       
-      <div className="flex-1 p-6 md:p-8 flex flex-col justify-center gap-[14px] font-sans font-black text-sm uppercase tracking-wider text-white/50 border-b border-white/10 relative bg-nomad-charcoal/40 backdrop-blur-sm">
+      <div className="flex-1 p-6 md:p-8 flex flex-col justify-center gap-[14px] font-sans font-black text-sm uppercase tracking-wider text-white/50 relative bg-nomad-charcoal/40 backdrop-blur-sm overflow-y-auto" data-lenis-prevent>
         {sections.map(({ id, label }) => {
           const isActive = activeSection === id;
           return (
@@ -43,18 +43,18 @@ function NavPanelContent({ handleJoin, setCursorVariant, setShowVideo, activeSec
               onMouseLeave={() => setCursorVariant('default')} 
               onClick={() => scrollToSection(id)}
             >
-                <div className={`w-2 h-2 rounded-full transition-all ${isActive ? 'bg-nomad-green shadow-[0_0_10px_rgba(34,197,94,0.8)]' : 'bg-transparent'}`} /> 
+                <div className={`w-2 h-2 rounded-full transition-all flex-shrink-0 ${isActive ? 'bg-nomad-green shadow-[0_0_10px_rgba(34,197,94,0.8)]' : 'bg-transparent'}`} /> 
                 {label}
             </button>
           )
         })}
         
-        <div className="mt-2 flex flex-col gap-3">
+        <div className="mt-4 flex flex-col gap-3">
           <button 
             onClick={handleJoin}
             onMouseEnter={() => setCursorVariant('waitlist')}
             onMouseLeave={() => setCursorVariant('default')}
-            className="w-full bg-[#FFD700] text-nomad-charcoal px-6 py-3 font-black text-sm uppercase tracking-widest cursor-none hover:bg-white transition-colors flex items-center justify-between group shadow-[4px_4px_0px_rgba(0,0,0,0.5)]"
+            className="w-full bg-[#FFD700] text-nomad-charcoal px-6 py-4 font-black text-sm uppercase tracking-widest cursor-none hover:bg-white transition-colors flex items-center justify-between group shadow-[4px_4px_0px_rgba(0,0,0,0.5)]"
           >
             EARLY ACCESS
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -66,28 +66,11 @@ function NavPanelContent({ handleJoin, setCursorVariant, setShowVideo, activeSec
             onClick={toggleSound}
             onMouseEnter={() => setCursorVariant('hover')}
             onMouseLeave={() => setCursorVariant('default')}
-            className="w-full border border-white/20 text-white/70 px-6 py-3 font-black text-sm uppercase tracking-widest cursor-none hover:bg-white/10 hover:text-white transition-colors flex items-center justify-between group"
+            className="w-full border border-white/20 text-white/70 px-6 py-4 font-black text-sm uppercase tracking-widest cursor-none hover:bg-white/10 hover:text-white transition-colors flex items-center justify-between group"
           >
             AUDIO {isSoundEnabled ? 'ON' : 'OFF'}
             {isSoundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
           </button>
-        </div>
-      </div>
-      
-      <div className="h-64 p-6 flex flex-col items-center justify-center bg-nomad-charcoal/60 relative group shrink-0">
-        <p className="text-white/40 text-[10px] tracking-[0.2em] font-black uppercase mb-3 opacity-90 group-hover:text-nomad-green transition-colors">WATCH OUR REEL</p>
-        <div 
-          onClick={() => setShowVideo(true)}
-          className="w-full flex-1 relative overflow-hidden bg-black/50 border border-white/10 cursor-none shadow-[0_0_15px_rgba(255,255,255,0.05)] group-hover:shadow-[0_0_20px_rgba(34,197,94,0.2)] group-hover:border-nomad-green/50 transition-all rounded" 
-          onMouseEnter={() => setCursorVariant('hover')} 
-          onMouseLeave={() => setCursorVariant('default')}
-        >
-            <img src={assets.images.videoThumbnail} alt="Experience" className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-12 h-12 bg-white flex items-center justify-center rounded-full group-hover:scale-110 transition-transform">
-                  <Play className="w-5 h-5 text-nomad-charcoal ml-1" fill="currentColor" />
-              </div>
-            </div>
         </div>
       </div>
     </>
@@ -106,19 +89,34 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
   const yText = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
   
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(() => typeof window !== 'undefined' ? window.innerWidth >= 768 : true);
+  const [isMenuOpen, setIsMenuOpen] = useState(() => typeof window !== 'undefined' ? window.innerWidth >= 1024 : true);
   const [showVideo, setShowVideo] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+
+  useEffect(() => {
+    if (isMenuOpen && typeof window !== 'undefined' && window.innerWidth < 1024) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY > 100;
       if (scrolled !== isScrolled) {
         setIsScrolled(scrolled);
-        if (scrolled) {
-          setIsMenuOpen(false);
-        } else if (window.innerWidth >= 768) {
-          setIsMenuOpen(true);
+        // Only automatically close/open menu based on scroll on desktop view. 
+        // Mobile users will manually open/close.
+        if (typeof window !== 'undefined' && window.innerWidth >= 1024) {
+          if (scrolled) {
+            setIsMenuOpen(false);
+          } else {
+            setIsMenuOpen(true);
+          }
         }
       }
 
@@ -172,7 +170,7 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
              opacity: (!isScrolled && isMenuOpen) ? 1 : 0 
           }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
-          className="hidden md:flex flex-col border-r border-white/10 relative overflow-hidden shrink-0 bg-nomad-charcoal/80 backdrop-blur-sm z-30"
+          className="hidden lg:flex flex-col border-r border-white/10 relative overflow-hidden shrink-0 bg-nomad-charcoal/80 backdrop-blur-sm z-30"
         >
           <div className="w-[240px] xl:w-[280px] h-full flex flex-col">
             <NavPanelContent 
@@ -241,28 +239,46 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.8, duration: 1 }}
-                className="mt-8 max-w-xl text-nomad-ivory/80 text-sm md:text-base font-medium leading-relaxed drop-shadow-md z-10 px-4 mb-10"
+                className="mt-8 max-w-xl text-nomad-ivory/80 text-sm md:text-base font-medium leading-relaxed drop-shadow-md z-10 px-4 mb-8"
               >
                 The ultimate event engagement platform. We help you turn your events into experiences. Ready to create, join and participate in experiences of a lifetime?
               </motion.p>
+              
+              <div className="flex flex-col items-center justify-center gap-6 md:gap-10 mt-2 z-20">
+                {/* Watch Reel Button */}
+                <motion.button
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.9, duration: 0.6 }}
+                  onClick={() => setShowVideo(true)}
+                  onMouseEnter={() => setCursorVariant('hover')}
+                  onMouseLeave={() => setCursorVariant('default')}
+                  className="group flex flex-col md:flex-row items-center gap-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full px-6 py-3 cursor-none transition-all duration-300 backdrop-blur-sm"
+                >
+                  <div className="w-10 h-10 rounded-full bg-nomad-green flex items-center justify-center text-[#111] group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(34,197,94,0.3)]">
+                    <Play className="w-4 h-4 ml-0.5" fill="currentColor" />
+                  </div>
+                  <span className="text-white text-xs md:text-sm font-black uppercase tracking-widest">Watch App Announcement</span>
+                </motion.button>
 
-              <div className="relative z-20 flex justify-center pb-12 w-full mt-4 md:mt-8">
-                  {/* Center Floating Diamond Scroll Button */}
-                  <motion.div 
-                    initial={{ scale: 0, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: 0.6, type: "spring" }}
-                    className="w-12 h-12 md:w-16 md:h-16 bg-white/5 backdrop-blur-sm rotate-45 border border-white/10 flex items-center justify-center cursor-none hover:bg-nomad-green transition-all duration-300 group"
-                    onMouseEnter={() => setCursorVariant('hover')}
-                    onMouseLeave={() => setCursorVariant('default')}
-                    onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
-                  >
-                     <div className="-rotate-45 flex flex-col items-center justify-center">
-                       <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
-                          <ArrowDown strokeWidth={2.5} className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:text-[#111]" />
-                       </motion.div>
-                     </div>
-                  </motion.div>
+                <div className="relative flex justify-center pb-12 w-full">
+                    {/* Center Floating Diamond Scroll Button */}
+                    <motion.div 
+                      initial={{ scale: 0, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.6, type: "spring" }}
+                      className="w-12 h-12 md:w-16 md:h-16 bg-white/5 backdrop-blur-sm rotate-45 border border-white/10 flex items-center justify-center cursor-none hover:bg-nomad-green transition-all duration-300 group"
+                      onMouseEnter={() => setCursorVariant('hover')}
+                      onMouseLeave={() => setCursorVariant('default')}
+                      onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+                    >
+                       <div className="-rotate-45 flex flex-col items-center justify-center">
+                         <motion.div animate={{ y: [0, 4, 0] }} transition={{ repeat: Infinity, duration: 1.5 }}>
+                            <ArrowDown strokeWidth={2.5} className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:text-[#111]" />
+                         </motion.div>
+                       </div>
+                    </motion.div>
+                </div>
               </div>
             </motion.div>
         </div>
@@ -272,26 +288,47 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
       </div>
 
       {/* Floating Hamburger Button */}
-      <motion.button
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-        onMouseEnter={() => setCursorVariant('hover')}
-        onMouseLeave={() => setCursorVariant('default')}
-        className={`fixed top-6 right-6 md:top-8 md:right-8 z-[60] w-12 h-12 md:w-14 md:h-14 bg-nomad-green text-nomad-charcoal rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-all duration-300 cursor-none opacity-100 pointer-events-auto translate-x-0 scale-100`}
-      >
-        <motion.div animate={{ rotate: isMenuOpen ? 90 : 0 }}>
-           {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </motion.div>
-      </motion.button>
+      <div className="fixed top-6 right-6 md:top-8 md:right-8 z-[60] flex flex-col gap-3">
+        <motion.button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onMouseEnter={() => setCursorVariant('hover')}
+          onMouseLeave={() => setCursorVariant('default')}
+          className={`w-12 h-12 md:w-14 md:h-14 bg-nomad-green text-nomad-charcoal rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-all duration-300 cursor-none relative z-[60]`}
+        >
+          <motion.div animate={{ rotate: isMenuOpen ? 90 : 0 }}>
+             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </motion.div>
+        </motion.button>
+        
+        <AnimatePresence>
+          {isScrolled && (
+             <motion.button
+               initial={{ opacity: 0, scale: 0.8, y: -10 }}
+               animate={{ opacity: 1, scale: 1, y: 0 }}
+               exit={{ opacity: 0, scale: 0.8, y: -10 }}
+               transition={{ duration: 0.2 }}
+               onClick={() => onJoinWaitlist()}
+               onMouseEnter={() => setCursorVariant('hover')}
+               onMouseLeave={() => setCursorVariant('default')}
+               title="Join Waitlist"
+               className="md:hidden w-12 h-12 bg-[#FFD700] text-[#111] rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-all duration-300 cursor-none relative z-[59]"
+             >
+                <ArrowDown className="w-5 h-5 -rotate-45" strokeWidth={3} />
+             </motion.button>
+          )}
+        </AnimatePresence>
+      </div>
 
       {/* Fixed Sidebar Menu */}
       <AnimatePresence>
-        {isMenuOpen && (isScrolled || (typeof window !== 'undefined' && window.innerWidth < 768)) && (
+        {isMenuOpen && (isScrolled || (typeof window !== 'undefined' && window.innerWidth < 1024)) && (
           <motion.div 
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
             className="fixed top-0 right-0 h-screen w-full sm:w-[320px] bg-nomad-charcoal/95 backdrop-blur-xl border-l border-white/10 z-[50] flex flex-col pb-8 overflow-y-auto"
+            data-lenis-prevent
           >
              <NavPanelContent 
                handleJoin={handleJoin} 

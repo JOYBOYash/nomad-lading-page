@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, useScroll, AnimatePresence } from 'motion/react';
 import Lenis from 'lenis';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Hero from './components/Hero';
 import Problem from './components/Problem';
 import Difference from './components/Difference';
@@ -13,6 +14,18 @@ import Footer from './components/Footer';
 import WaitlistModal from './components/WaitlistModal';
 import { AppProvider, useAppContext } from './context/AppContext';
 import CustomCursor from './components/CustomCursor';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
@@ -87,6 +100,21 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   );
 }
 
+function Home({ scrollToWaitlist }: { scrollToWaitlist: () => void }) {
+  return (
+    <main>
+      <section id="home"><Hero onJoinWaitlist={scrollToWaitlist} /></section>
+      <section id="problem"><Problem /></section>
+      <section id="difference"><Difference /></section>
+      <section id="features"><Features /></section>
+      <section id="how-it-works"><HowItWorks /></section>
+      <section id="wall-of-fame"><SocialProof /></section>
+      <section id="faq"><FAQ /></section>
+      <section id="waitlist"><FooterCTA /></section>
+    </main>
+  );
+}
+
 function MainApp() {
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -158,16 +186,11 @@ function MainApp() {
         style={{ scaleX: scrollYProgress }}
       />
 
-      <main>
-        <section id="home"><Hero onJoinWaitlist={scrollToWaitlist} /></section>
-        <section id="problem"><Problem /></section>
-        <section id="difference"><Difference /></section>
-        <section id="features"><Features /></section>
-        <section id="how-it-works"><HowItWorks /></section>
-        <section id="wall-of-fame"><SocialProof /></section>
-        <section id="faq"><FAQ /></section>
-        <section id="waitlist"><FooterCTA /></section>
-      </main>
+      <Routes>
+        <Route path="/" element={<Home scrollToWaitlist={scrollToWaitlist} />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfService />} />
+      </Routes>
 
       <Footer />
       
@@ -180,17 +203,6 @@ function MainApp() {
           setUserDismissedModal(true);
         }}
       />
-
-      {/* Mobile Sticky CTA */}
-      <div className="sm:hidden fixed bottom-6 left-6 right-6 z-40">
-        <motion.button 
-          onClick={scrollToWaitlist}
-          whileTap={{ scale: 0.95 }}
-          className="w-full py-4 rounded-full bg-nomad-green text-nomad-charcoal font-black uppercase tracking-widest text-lg shadow-2xl shadow-nomad-green/40"
-        >
-          Join Waitlist
-        </motion.button>
-      </div>
     </div>
   );
 }
@@ -198,7 +210,10 @@ function MainApp() {
 export default function App() {
   return (
     <AppProvider>
-      <MainApp />
+      <Router>
+        <ScrollToTop />
+        <MainApp />
+      </Router>
     </AppProvider>
   );
 }

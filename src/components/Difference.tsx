@@ -114,20 +114,23 @@ export default function Difference() {
               let opacity = 0;
               let zIndex = 0;
 
+              const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+              const sideOffset = isMobile ? "110%" : "105%";
+
               if (isCenter) {
                 xPos = "0%";
-                scale = 1.05;
+                scale = isMobile ? 1 : 1.05;
                 opacity = 1;
                 zIndex = 20;
               } else if (isLeft) {
-                xPos = "-105%"; 
-                scale = 0.9;
-                opacity = 0.4;
+                xPos = "-" + sideOffset; 
+                scale = isMobile ? 0.85 : 0.9;
+                opacity = isMobile ? 0.2 : 0.4;
                 zIndex = 10;
               } else if (isRight) {
-                xPos = "105%";
-                scale = 0.9;
-                opacity = 0.4;
+                xPos = sideOffset;
+                scale = isMobile ? 0.85 : 0.9;
+                opacity = isMobile ? 0.2 : 0.4;
                 zIndex = 10;
               } else if (offset < -1) {
                 xPos = "-200%";
@@ -143,7 +146,7 @@ export default function Difference() {
 
               // Card Theme reversing for center
               const cardBg = isCenter ? 'bg-nomad-green' : 'bg-[#1c1c1c]';
-              const cardBorder = isCenter ? 'border-transparent' : 'border-nomad-green/50';
+              const cardBorder = isCenter ? 'border-none ring-1 ring-nomad-green/50 shadow-[0_0_40px_rgba(34,197,94,0.15)]' : 'border-nomad-green/30';
               const iconColor = isCenter ? 'text-[#111]' : 'text-nomad-green';
               const titleColor = isCenter ? 'text-[#111]' : 'text-white';
               const descColor = isCenter ? 'text-[#111]/80' : 'text-[#a1a1aa]';
@@ -163,20 +166,34 @@ export default function Difference() {
                       clipPath: "polygon(24px 0, 100% 0, 100% calc(100% - 24px), calc(100% - 24px) 100%, 0 100%, 0 24px)",
                       pointerEvents: isVisible ? 'auto' : 'none'
                     }}
-                    className={`absolute w-[85%] sm:w-[60%] md:w-[32%] max-w-[380px] h-full min-h-[320px] p-8 md:p-10 flex flex-col items-start justify-start text-left border-l-[3px] transition-colors duration-500
-                      ${cardBg} ${cardBorder} hover:border-nomad-green
+                    className={`absolute w-[90%] sm:w-[60%] md:w-[32%] max-w-[380px] h-full min-h-[360px] p-8 md:p-10 flex flex-col items-start justify-start text-left border-l-[3px] transition-colors duration-500
+                      ${cardBg} ${cardBorder} hover:border-nomad-green relative overflow-hidden group
                     `}
                  >
-                    <div className="flex items-center gap-6 mb-8 w-full">
-                       <div className={`shrink-0 transition-colors duration-500 ${iconColor}`}>
-                         <Icon strokeWidth={1.5} className="w-12 h-12 md:w-14 md:h-14" />
+                    {/* Decorative Background Elements */}
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5 mix-blend-overlay pointer-events-none" />
+                    {isCenter && (
+                      <>
+                        <div className="absolute top-[-50px] right-[-50px] w-32 h-32 bg-white/20 blur-3xl rounded-full" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-b from-transparent to-[#111]/5 pointer-events-none" />
+                        <div className="absolute top-6 right-6 w-2 h-2 rounded-full bg-[#111] opacity-20" />
+                        <div className="absolute bottom-6 left-6 w-2 h-2 rounded-full bg-[#111] opacity-20" />
+                      </>
+                    )}
+                    {!isCenter && (
+                       <div className="absolute top-[-50px] right-[-50px] w-32 h-32 bg-nomad-green/10 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    )}
+
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-8 w-full relative z-10">
+                       <div className={`shrink-0 transition-colors duration-500 ${iconColor} bg-white/5 p-4 rounded-2xl`}>
+                         <Icon strokeWidth={1.5} className="w-10 h-10 md:w-12 md:h-12" />
                        </div>
                        <h3 className={`text-xl md:text-2xl font-black font-sans uppercase tracking-widest whitespace-pre-line leading-tight transition-colors duration-500 ${titleColor}`}>
                          {card.title}
                        </h3>
                     </div>
                     
-                    <p className={`text-sm md:text-base font-medium leading-relaxed w-full border-t pt-6 mt-auto transition-colors duration-500 ${descColor} ${dividerColor}`}>
+                    <p className={`text-sm md:text-base font-medium leading-relaxed w-full border-t pt-6 mt-auto transition-colors duration-500 ${descColor} ${dividerColor} relative z-10`}>
                       {card.desc}
                     </p>
                  </motion.div>

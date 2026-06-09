@@ -86,9 +86,9 @@ export default function SocialProof() {
              <svg width="60" height="60" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0l2 8 8 2-8 2-2 8-2-8-8-2 8-2z"/></svg>
            </div>
            
-           <div className="flex flex-col gap-2 md:gap-4 text-center w-full max-w-6xl mx-auto relative z-10 font-black font-display uppercase tracking-[-0.03em] leading-[1.1]">
-              <span className="text-white/80 block text-[24px] sm:text-[32px] md:text-[40px] lg:text-[48px]">SHATTER THE STATUS QUO.</span>
-              <span className="text-white block text-[36px] sm:text-[48px] md:text-[60px] lg:text-[76px]">MAKE YOUR NEXT <span className="text-nomad-green">EVENT LEGENDARY.</span></span>
+           <div className="flex flex-col gap-2 md:gap-4 text-center w-full max-w-6xl mx-auto relative z-10 font-black font-display uppercase tracking-[-0.03em] leading-[1.1] px-2">
+              <span className="text-white/80 block text-[22px] sm:text-[32px] md:text-[40px] lg:text-[48px] break-words">SHATTER THE STATUS QUO.</span>
+              <span className="text-white block text-[28px] sm:text-[48px] md:text-[60px] lg:text-[76px] break-words">MAKE YOUR NEXT <span className="text-nomad-green block md:inline">EVENT LEGENDARY.</span></span>
            </div>
         </motion.div>
 

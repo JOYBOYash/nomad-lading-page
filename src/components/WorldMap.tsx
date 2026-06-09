@@ -39,7 +39,7 @@ export default function WorldMap() {
           preserveAspectRatio="xMidYMid slice"
           projectionConfig={{
             scale: 180,
-            center: [10, 30]
+            center: [40, 20]
           }}
         >
           <Geographies geography={geoUrl}>

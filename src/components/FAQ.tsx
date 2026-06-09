@@ -4,20 +4,32 @@ import { ChevronDown } from 'lucide-react';
 
 const faqs = [
   {
-    question: "What makes Nomad different from other event apps?",
-    answer: "Nomad is fundamentally built around gamification and tangible rewards. Instead of a glorified digital brochure, we provide a live ecosystem where attendees earn tokens for engaging with sponsors, exploring the venue, and completing proximity-based missions."
+    question: "What makes Nomad different from standard event apps?",
+    answer: "Unlike static digital brochures, Nomad turns events into interactive experiences. We use location-based gamification and real-time challenges to make exploring the venue, attending sessions, and meeting people genuinely engaging."
   },
   {
-    question: "Do I need crypto knowledge to use the token system?",
-    answer: "Absolutely not. While we use 'tokens' as a reward currency, the entire experience is seamlessly integrated into the app without requiring wallets, crypto, or blockchain knowledge. It's just pure, fun participation."
+    question: "How do the proximity-based missions work?",
+    answer: "We use smart geofencing and quick QR check-ins. When you walk into a specific zone—like a sponsor booth, a keynote stage, or a networking lounge—your device automatically unlocks contextual missions and secret perks."
   },
   {
-    question: "How do proximity missions work?",
-    answer: "Organizers can set up geo-fenced zones or use QR-based check-ins. When an attendee enters a specific area—like a sponsor booth or a keynote stage—missions automatically trigger on their device, guiding their event journey."
+    question: "Are the digital tokens real money?",
+    answer: "No, tokens are an exclusive in-app currency earned by participating in event activities. You can redeem them directly at the event for tangible rewards like limited-edition merch, VIP access, or free food and drinks."
   },
   {
-    question: "Is this only for large-scale festivals?",
-    answer: "Not at all! Nomad scales from intimate corporate retreats and private tech summits all the way up to massive music festivals. The gamification mechanics can be tailored to any crowd size."
+    question: "Do I need to download a heavy app to participate?",
+    answer: "We've optimized Nomad to be incredibly lightweight. It's designed for fast onboarding so you can scan a code, jump into the map, and start exploring in seconds without draining your battery or data."
+  },
+  {
+    question: "Can I form teams and compete with friends?",
+    answer: "Absolutely! The live leaderboards track both individual and team progress. You can squad up with other attendees to tackle complex missions and claim the top spot on the event-wide rankings."
+  },
+  {
+    question: "Does Nomad work offline or in crowded areas with bad reception?",
+    answer: "We know event Wi-Fi can be unpredictable. Nomad uses an offline-first architecture that caches your personalized map, active missions, and progress, syncing up automatically the moment you reconnect."
+  },
+  {
+    question: "Is this platform only for massive festivals?",
+    answer: "Not at all. The Nomad engine scales effortlessly from intimate tech summits and corporate offsites to multi-day conventions. The gamification mechanics can be tailored to fit the exact vibe and size of any crowd."
   }
 ];
 
