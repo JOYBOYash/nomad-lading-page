@@ -29,7 +29,7 @@ export default function WaitlistModal({ isOpen, onClose, onScrollToJoin, onNever
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="fixed left-1/2 top-1/2 z-[101] w-full max-w-lg -translate-x-1/2 -translate-y-1/2 p-6"
           >
-            <div className="relative bg-[#111] p-10 border border-white/10 shadow-3xl text-nomad-ivory rounded-[2rem] text-center overflow-hidden">
+            <div className="relative bg-nomad-charcoal p-10 border border-white/10 shadow-3xl text-nomad-ivory rounded-[2rem] text-center overflow-hidden">
               
               <div className="absolute top-0 left-0 w-full h-2 bg-nomad-green" />
 

@@ -3,7 +3,7 @@ import { ArrowRight, ChevronDown, CheckCircle, AlertCircle, Users } from 'lucide
 import { FormEvent, useState, useEffect } from 'react';
 import { useAppContext } from '../context/AppContext';
 import { db } from '../lib/firebase';
-import { collection, addDoc, serverTimestamp, doc, onSnapshot, runTransaction } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, doc, onSnapshot, runTransaction, query, where, getDocs } from 'firebase/firestore';
 import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function FooterCTA() {
@@ -79,6 +79,18 @@ export default function FooterCTA() {
         throw new Error("Firebase is not connected. Please add your config in .env");
       }
 
+      const formattedEmail = email.toLowerCase().trim();
+
+      // Check if email already exists
+      const q = query(collection(db, 'waitlist'), where('email', '==', formattedEmail));
+      const querySnapshot = await getDocs(q);
+      
+      if (!querySnapshot.empty) {
+        setStatus('error');
+        setErrorMessage('This email is already registered on the waitlist.');
+        return;
+      }
+
       let emailSentStatus = false;
 
       // Send confirmation email via EmailJS
@@ -94,7 +106,7 @@ export default function FooterCTA() {
             emailJsTemplateId,
             {
               to_name: name,
-              to_email: email,
+              to_email: formattedEmail,
               user_role: role,
               reply_to: "support@nomad.com", // Replace with your support email
             },
@@ -105,14 +117,14 @@ export default function FooterCTA() {
           console.warn("EmailJS credentials are not fully configured in .env");
         }
       } catch (emailError) {
-        console.error("Failed to send welcome email (Quota likely exceeded):", emailError);
+        console.error("Failed to send welcome email:", emailError);
         // If email fails but we still want to log the user as 'not sent'
       }
 
       // Add user to waitlist
       const waitlistDocRef = await addDoc(collection(db, 'waitlist'), {
         name,
-        email,
+        email: formattedEmail,
         role,
         emailSent: emailSentStatus,
         createdAt: serverTimestamp(),
@@ -123,7 +135,7 @@ export default function FooterCTA() {
         await addDoc(collection(db, 'waitlist_pending_emails'), {
           waitlistId: waitlistDocRef.id,
           name,
-          email,
+          email: formattedEmail,
           role,
           createdAt: serverTimestamp(),
         });
