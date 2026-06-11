@@ -81,34 +81,32 @@ export default function FooterCTA() {
 
       let emailSentStatus = false;
 
-      if (peopleJoined < 200) {
-        // Send confirmation email via EmailJS (Free Tier)
-        try {
-          const emailJsServiceId = import.meta.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-          const emailJsTemplateId = import.meta.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-          const emailJsPublicKey = import.meta.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+      // Send confirmation email via EmailJS
+      try {
+        const emailJsServiceId = import.meta.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_0kza3o8";
+        const emailJsTemplateId = import.meta.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_exe20rw";
+        const emailJsPublicKey = import.meta.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "bp8cytYGh7kJfv0DQ";
 
-          if (emailJsServiceId && emailJsTemplateId && emailJsPublicKey) {
-            const { send } = await import('@emailjs/browser');
-            await send(
-              emailJsServiceId,
-              emailJsTemplateId,
-              {
-                to_name: name,
-                to_email: email,
-                user_role: role,
-                reply_to: "support@nomad.com", // Replace with your support email
-              },
-              emailJsPublicKey
-            );
-            emailSentStatus = true;
-          } else {
-            console.warn("EmailJS credentials are not fully configured in .env");
-          }
-        } catch (emailError) {
-          console.error("Failed to send welcome email (Quota likely exceeded):", emailError);
-          // We still consider the waitlist signup a success even if email fails
+        if (emailJsServiceId && emailJsTemplateId && emailJsPublicKey) {
+          const { send } = await import('@emailjs/browser');
+          await send(
+            emailJsServiceId,
+            emailJsTemplateId,
+            {
+              to_name: name,
+              to_email: email,
+              user_role: role,
+              reply_to: "support@nomad.com", // Replace with your support email
+            },
+            emailJsPublicKey
+          );
+          emailSentStatus = true;
+        } else {
+          console.warn("EmailJS credentials are not fully configured in .env");
         }
+      } catch (emailError) {
+        console.error("Failed to send welcome email (Quota likely exceeded):", emailError);
+        // If email fails but we still want to log the user as 'not sent'
       }
 
       // Add user to waitlist
