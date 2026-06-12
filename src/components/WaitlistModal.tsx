@@ -44,7 +44,7 @@ export default function WaitlistModal({ isOpen, onClose, onScrollToJoin, onNever
 
               <div className="py-6">
                 <div className="w-20 h-20 bg-white/5 border border-white/10 rounded-full flex items-center justify-center mx-auto mb-8 shadow-xl shadow-nomad-green/10">
-                   <img src="https://www.dropbox.com/scl/fi/eez8in6tuf5mgf3b4scz1/Nomad.svg?rlkey=6x9d65a0tljcelq7n6gmiy9px&st=g0vfrzvp&raw=1" alt="Nomad Logo" className="h-8 w-8 filter brightness-0 invert" style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(50%) saturate(579%) hue-rotate(63deg) brightness(98%) contrast(93%)' }} />
+                  <img src="https://www.dropbox.com/scl/fi/eez8in6tuf5mgf3b4scz1/Nomad.svg?rlkey=6x9d65a0tljcelq7n6gmiy9px&st=u039rw9p&raw=1" alt="Nomad Logo" className="h-8 w-8 filter brightness-0 invert" style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(50%) saturate(579%) hue-rotate(63deg) brightness(98%) contrast(93%)' }} />
                 </div>
                 
                 <h2 className="text-4xl md:text-5xl font-black font-display uppercase tracking-tighter mb-4 text-white leading-none">

@@ -62,7 +62,7 @@ function NavPanelContent({ handleJoin, setCursorVariant, activeSection, isSoundE
     <>
       <div className="h-28 p-6 md:p-8 flex justify-start items-center border-b border-white/10 shrink-0">
         <div className="flex items-center gap-3">
-          <img src={assets.images.logo} alt="Nomad Logo" className="h-6 filter brightness-0 invert opacity-90" style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(50%) saturate(579%) hue-rotate(63deg) brightness(98%) contrast(93%)' }} />
+          <img src="https://www.dropbox.com/scl/fi/eez8in6tuf5mgf3b4scz1/Nomad.svg?rlkey=6x9d65a0tljcelq7n6gmiy9px&st=u039rw9p&raw=1" alt="Nomad Logo" className="h-6 filter brightness-0 invert opacity-90" style={{ filter: 'brightness(0) saturate(100%) invert(67%) sepia(50%) saturate(579%) hue-rotate(63deg) brightness(98%) contrast(93%)' }} />
           <span className="text-2xl font-display font-black tracking-tighter text-nomad-ivory uppercase">Nomad</span>
         </div>
       </div>
