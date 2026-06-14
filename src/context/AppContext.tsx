@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode, useRef, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode, useRef, useEffect, useCallback } from 'react';
 
 interface AppContextType {
   isSoundEnabled: boolean;
@@ -70,7 +70,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const playHover = () => {
+  const playHover = useCallback(() => {
     if (!isSoundEnabled || !audioCtxRef.current) return;
     
     try {
@@ -96,9 +96,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     } catch(e) {
       console.error(e);
     }
-  };
+  }, [isSoundEnabled]);
 
-  const playClick = () => {
+  const playClick = useCallback(() => {
     if (!isSoundEnabled || !audioCtxRef.current) return;
     try {
       const ctx = audioCtxRef.current;
@@ -122,9 +122,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
     } catch (e) {
       console.error(e);
     }
-  };
+  }, [isSoundEnabled]);
 
-  const playPop = () => {
+  const playPop = useCallback(() => {
     if (!isSoundEnabled || !audioCtxRef.current) return;
     try {
       const ctx = audioCtxRef.current;
@@ -149,12 +149,12 @@ export function AppProvider({ children }: { children: ReactNode }) {
     } catch (e) {
       console.error(e);
     }
-  };
+  }, [isSoundEnabled]);
 
   useEffect(() => {
     const handleGlobalTrigger = (e: Event) => {
-      const target = e.target as HTMLElement;
-      if (target.closest('button, a, select, [role="button"], input[type="button"], input[type="submit"]')) {
+      const target = e.target as Element;
+      if (target && typeof target.closest === 'function' && target.closest('button, a, select, [role="button"], input[type="button"], input[type="submit"]')) {
         playClick();
       }
     };
@@ -164,7 +164,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return () => {
       document.removeEventListener('click', handleGlobalTrigger, true);
     };
-  }, [isSoundEnabled]);
+  }, [isSoundEnabled, playClick]);
 
   return (
     <AppContext.Provider value={{ isSoundEnabled, toggleSound, setIsSoundEnabled, playHover, playClick, playPop, cursorVariant, setCursorVariant }}>

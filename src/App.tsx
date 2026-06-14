@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, useScroll, AnimatePresence } from 'motion/react';
 import Lenis from 'lenis';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
@@ -37,7 +37,11 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
     const imagesToLoad = [
       assets.images.logo,
+      "https://www.dropbox.com/scl/fi/eez8in6tuf5mgf3b4scz1/Nomad.svg?rlkey=6x9d65a0tljcelq7n6gmiy9px&st=u039rw9p&raw=1",
       assets.images.videoThumbnail,
+      "https://images.pexels.com/photos/147413/twitter-facebook-together-exchange-of-information-147413.jpeg",
+      "https://images.pexels.com/photos/35138560/pexels-photo-35138560.jpeg",
+      "https://images.pexels.com/photos/7054391/pexels-photo-7054391.jpeg"
     ];
     
     const videosToLoad = [
@@ -50,13 +54,23 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
     const baseFakeSteps = 5;
     const totalCount = imagesToLoad.length + videosToLoad.length + baseFakeSteps;
 
+    let isComplete = false;
+
+    const finishLoading = () => {
+      if (isComplete) return;
+      isComplete = true;
+      setProgress(100);
+      setTimeout(onComplete, 800); // Give enough time for the bar to animate to 100%
+    };
+
     const updateProgress = () => {
+      if (isComplete) return;
       loadedCount++;
-      const currentProgress = Math.min((loadedCount / totalCount) * 100, 100);
+      const currentProgress = Math.min((loadedCount / totalCount) * 100, 99);
       setProgress(currentProgress);
       
       if (loadedCount >= totalCount) {
-        setTimeout(onComplete, 600);
+        finishLoading();
       }
     };
 
@@ -71,7 +85,7 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
     // Preload Videos
     videosToLoad.forEach(src => {
       const video = document.createElement('video');
-      video.onloadeddata = updateProgress;
+      video.oncanplaythrough = updateProgress;
       video.onerror = updateProgress;
       video.src = src;
       video.load();
@@ -80,6 +94,10 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
     // Fake steps to keep the bar moving even if cache is instant
     let stepCount = 0;
     const fakeTimer = setInterval(() => {
+      if (isComplete) {
+        clearInterval(fakeTimer);
+        return;
+      }
       stepCount++;
       updateProgress();
       if (stepCount >= baseFakeSteps) {
@@ -89,7 +107,7 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
 
     // Safety timeout in case assets hang (e.g. adblocker dropping requests, network issues)
     const safetyTimeout = setTimeout(() => {
-      onComplete();
+      finishLoading();
     }, 5000);
 
     return () => {
@@ -184,6 +202,10 @@ function MainApp() {
     }
   };
 
+  const handleLoadingComplete = useCallback(() => {
+    setIsLoading(false);
+  }, []);
+
   useEffect(() => {
     setIsLoading(true);
   }, [location.pathname]);
@@ -262,12 +284,12 @@ function MainApp() {
       <CustomCursor />
       
       <AnimatePresence>
-        {isLoading && <LoadingScreen onComplete={() => setIsLoading(false)} />}
+        {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
       </AnimatePresence>
 
       {/* Scroll Progress Bar */}
       <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-nomad-green z-[100] origin-left"
+        className={`fixed top-0 left-0 right-0 h-1 bg-nomad-green z-[100] origin-left transition-opacity duration-300 ${isLoading || isModalOpen ? 'opacity-0' : 'opacity-100'}`}
         style={{ scaleX: scrollYProgress }}
       />
 

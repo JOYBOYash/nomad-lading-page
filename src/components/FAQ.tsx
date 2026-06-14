@@ -34,11 +34,18 @@ const faqs = [
 ];
 
 export default function FAQ() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const [openIndices, setOpenIndices] = useState<number[]>([0]);
+
+  const toggleOpen = (index: number) => {
+    setOpenIndices((current) => 
+      current.includes(index) 
+        ? current.filter((i) => i !== index)
+        : [...current, index]
+    );
+  };
 
   return (
-    <section className="py-24 md:py-32 bg-nomad-charcoal text-nomad-ivory overflow-hidden relative border-b border-white/5">
+    <section className="py-24 md:py-32 bg-nomad-charcoal text-nomad-ivory relative border-b border-white/5">
       <motion.div 
         variants={{
           hidden: { opacity: 0, y: 80 },
@@ -59,13 +66,9 @@ export default function FAQ() {
         </div>
 
         {/* FAQ List */}
-        <div 
-          className="flex flex-col border-t border-white/10 relative"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
+        <div className="flex flex-col border-t border-white/10 relative">
           {faqs.map((faq, index) => {
-            const isOpen = openIndex === index;
+            const isOpen = openIndices.includes(index);
             
             return (
             <div 
@@ -73,7 +76,7 @@ export default function FAQ() {
               className="relative overflow-hidden transition-colors duration-500 border-b border-white/10 group bg-transparent hover:bg-white/[0.02]"
             >
               <button
-                onClick={() => setOpenIndex(index)}
+                onClick={() => toggleOpen(index)}
                 className="w-full px-2 md:px-4 py-5 md:py-6 flex items-center justify-between text-left focus:outline-none"
               >
                 <div className="flex items-center gap-4 md:gap-8 pr-4">
