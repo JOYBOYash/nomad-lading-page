@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import { useCountdown } from './Countdown';
+import { useAppContext } from '../context/AppContext';
 
 export default function Timeline() {
+  const { theme } = useAppContext();
   const { days, hours, minutes, seconds } = useCountdown();
   const [progress, setProgress] = useState(0);
 
@@ -60,22 +62,22 @@ export default function Timeline() {
   ];
 
   return (
-    <section className="py-24 bg-nomad-charcoal text-nomad-ivory relative border-b border-white/5 overflow-hidden">
+    <section className={`py-24 relative overflow-hidden border-b ${theme === 'light' ? 'bg-nomad-green text-black border-white/20' : 'bg-nomad-charcoal text-nomad-ivory border-white/5'}`}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-16 text-center px-4">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-nomad-green mb-4">The Roadmap</h2>
-          <h3 className="text-2xl sm:text-4xl md:text-5xl font-display font-black uppercase tracking-tighter text-white mb-6 leading-none">
+          <h2 className={`text-sm font-bold uppercase tracking-widest mb-4 ${theme === 'light' ? 'text-white' : 'text-nomad-green'}`}>The Roadmap</h2>
+          <h3 className={`text-2xl sm:text-4xl md:text-5xl font-display font-black uppercase tracking-tighter mb-6 leading-none ${theme === 'light' ? 'text-black' : 'text-white'}`}>
             Countdown to <br className="sm:hidden" />
-            <span className="text-nomad-green">Launch</span>
+            <span className={theme === 'light' ? 'text-white' : 'text-nomad-green'}>Launch</span>
           </h3>
         </div>
 
         <div className="relative mt-24 pb-12 w-full max-w-6xl mx-auto">
           {/* Main timeline track */}
-          <div className="hidden lg:block absolute top-[28px] left-[12.5%] right-[12.5%] h-[2px] bg-white/10 z-0">
+          <div className={`hidden lg:block absolute top-[28px] left-[12.5%] right-[12.5%] h-[2px] z-0 ${theme === 'light' ? 'bg-white/60' : 'bg-white/10'}`}>
             {/* Progress fill */}
             <motion.div 
-              className="absolute top-0 left-0 bottom-0 bg-nomad-green z-0"
+              className={`absolute top-0 left-0 bottom-0 z-0 ${theme === 'light' ? 'bg-black' : 'bg-nomad-green'}`}
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 1, ease: 'easeOut' }}
@@ -97,18 +99,18 @@ export default function Timeline() {
                 className="flex flex-row lg:flex-col items-start lg:items-center relative w-full lg:w-1/4"
               >
                 <div className="hidden lg:block absolute top-0 w-full h-[60px] cursor-default">
-                   <div className={`absolute left-1/2 top-[28px] w-4 h-4 rounded-full -translate-x-1/2 -translate-y-1/2 z-10 transition-transform duration-300 hover:scale-150 ${isPassed ? 'bg-nomad-green shadow-[0_0_15px_rgba(0,255,102,0.5)]' : 'bg-theme-600 border-2 border-white/20'}`}></div>
+                   <div className={`absolute left-1/2 top-[28px] w-4 h-4 rounded-full -translate-x-1/2 -translate-y-1/2 z-10 transition-transform duration-300 hover:scale-150 ${isPassed ? (theme === 'light' ? 'bg-black shadow-[0_0_15px_rgba(0,0,0,0.3)]' : 'bg-nomad-green shadow-[0_0_15px_rgba(0,255,102,0.5)]') : (theme === 'light' ? 'bg-transparent border-2 border-white/60' : 'bg-theme-600 border-2 border-white/20')}`}></div>
                 </div>
 
-                <div className="lg:hidden w-[2px] bg-white/10 absolute top-0 bottom-0 left-[7px] z-0"></div>
-                <div className={`lg:hidden absolute left-[7px] top-6 w-4 h-4 rounded-full -translate-x-1/2 z-10 ${isPassed ? 'bg-nomad-green shadow-[0_0_15px_rgba(0,255,102,0.5)]' : 'bg-theme-600 border-2 border-white/20'}`}></div>
+                <div className={`lg:hidden w-[2px] absolute top-0 bottom-0 left-[7px] z-0 ${theme === 'light' ? 'bg-white/60' : 'bg-white/10'}`}></div>
+                <div className={`lg:hidden absolute left-[7px] top-6 w-4 h-4 rounded-full -translate-x-1/2 z-10 ${isPassed ? (theme === 'light' ? 'bg-black shadow-[0_0_15px_rgba(0,0,0,0.3)]' : 'bg-nomad-green shadow-[0_0_15px_rgba(0,255,102,0.5)]') : (theme === 'light' ? 'bg-transparent border-2 border-white/60' : 'bg-theme-600 border-2 border-white/20')}`}></div>
 
                 <div className="pl-8 lg:pl-0 pt-0 lg:pt-16 lg:text-center flex flex-col items-start lg:items-center relative w-full">
-                  <div className={`font-mono text-sm tracking-widest uppercase mb-2 ${isPassed ? 'text-nomad-green' : 'text-white/40'}`}>
+                  <div className={`font-mono text-sm tracking-widest uppercase mb-2 ${isPassed ? (theme === 'light' ? 'text-black' : 'text-nomad-green') : (theme === 'light' ? 'text-black/60' : 'text-white/40')}`}>
                     {milestone.date}
                   </div>
-                  <h4 className="text-xl md:text-2xl font-bold text-white mb-3">{milestone.title}</h4>
-                  <p className="text-white/60 leading-relaxed text-sm max-w-sm lg:hidden xl:block">
+                  <h4 className={`text-xl md:text-2xl font-bold mb-3 ${theme === 'light' ? 'text-black' : 'text-white'}`}>{milestone.title}</h4>
+                  <p className={`leading-relaxed text-sm max-w-sm lg:hidden xl:block ${theme === 'light' ? 'text-black/70' : 'text-white/60'}`}>
                     {milestone.description}
                   </p>
                 </div>

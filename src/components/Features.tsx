@@ -72,7 +72,7 @@ export default function Features() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className={`py-24 relative overflow-hidden bg-nomad-charcoal text-nomad-ivory`}
+      className={`py-24 relative overflow-hidden ${theme === 'light' ? 'bg-nomad-green text-[#000]' : 'bg-nomad-charcoal text-nomad-ivory'}`}
     >
       {/* Background glow */}
       <motion.div 
@@ -94,8 +94,8 @@ export default function Features() {
           variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
           className="text-center mb-16 flex flex-col items-center"
         >
-           <h2 className={`text-[36px] sm:text-[44px] md:text-[60px] lg:text-[70px] leading-none font-black font-display uppercase tracking-[-0.03em] text-white`}>
-             Why Nomad Wins
+           <h2 className={`text-[36px] sm:text-[44px] md:text-[60px] lg:text-[70px] leading-none font-black font-display uppercase tracking-[-0.03em] ${theme === 'light' ? 'text-[#000]' : 'text-white/90'}`}>
+             Why <span className={theme === 'light' ? 'text-[#fff]' : 'text-nomad-green'}> Nomad </span> Wins
            </h2>
         </motion.div>
 
@@ -115,7 +115,7 @@ export default function Features() {
                 <TiltCard className="w-full h-full group">
                   {/* Outer Ticket Container */}
                   <div 
-                    className={`relative flex w-full h-full bg-theme-500 rounded-xl overflow-hidden shadow-2xl transition-all duration-500 group-hover:-translate-y-1 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-px before:border-l-[3px] before:border-dotted before:border-theme-ticket/80 before:z-10 after:absolute after:right-[58px] after:top-2 after:bottom-2 after:w-px after:border-r-[3px] after:border-dotted after:border-theme-ticket/80 after:z-10 ${isActive ? '-translate-y-1' : ''}`}
+                    className={`relative flex w-full h-full ${theme === 'light' ? 'bg-[#FAFAFA]' : 'bg-theme-500'} rounded-xl overflow-hidden shadow-2xl transition-all duration-500 group-hover:-translate-y-1 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-px before:border-l-[3px] before:border-dotted before:border-theme-ticket/80 before:z-10 after:absolute after:right-[58px] after:top-2 after:bottom-2 after:w-px after:border-r-[3px] after:border-dotted after:border-theme-ticket/80 after:z-10 ${isActive ? '-translate-y-1' : ''}`}
                     onPointerEnter={(e) => {
                       if (e.pointerType === 'mouse') {
                         playHover();
@@ -133,68 +133,68 @@ export default function Features() {
                   >
                      
                      {/* Left Cutout */}
-                     <div className={`absolute top-1/2 -left-4 w-8 h-8 rounded-full -translate-y-1/2 z-20 transition-colors duration-500 bg-nomad-charcoal`} />
+                     <div className={`absolute top-1/2 -left-4 w-8 h-8 rounded-full -translate-y-1/2 z-20 transition-colors duration-500 ${theme === 'light' ? 'bg-nomad-green' : 'bg-nomad-charcoal'}`} />
                      
                      {/* Right Cutout */}
-                     <div className={`absolute top-1/2 -right-4 w-8 h-8 rounded-full -translate-y-1/2 z-20 transition-colors duration-500 bg-nomad-charcoal`} />
+                     <div className={`absolute top-1/2 -right-4 w-8 h-8 rounded-full -translate-y-1/2 z-20 transition-colors duration-500 ${theme === 'light' ? 'bg-nomad-green' : 'bg-nomad-charcoal'}`} />
 
                      {/* Content Area */}
                    <div className="flex-1 p-6 md:p-8 flex flex-col justify-between relative z-10 w-full overflow-hidden">
                       <div className="mb-10 relative z-20">
-                          <h3 className={`text-[20px] md:text-[22px] font-bold font-sans mb-3 leading-tight tracking-tight transition-colors duration-500 ${isActive ? 'text-nomad-green' : 'text-white'}`}>
+                          <h3 className={`text-[20px] md:text-[22px] font-bold font-sans mb-3 leading-tight tracking-tight transition-colors duration-500 ${isActive ? 'text-nomad-green' : (theme === 'light' ? 'text-[#000]/60' : 'text-white')}`}>
                             {feature.title}
                           </h3>
-                          <p className={`font-medium leading-relaxed text-[14px] transition-colors duration-500 ${isActive ? 'text-white/80' : 'text-[#9ca3af]'}`}>
+                          <p className={`font-medium leading-relaxed text-[14px] transition-colors duration-500 ${isActive ? (theme === 'light' ? 'text-[#000]' : 'text-white/80') : (theme === 'light' ? 'text-[#000]/50' : 'text-[#9ca3af]')}`}>
                             {feature.desc}
                           </p>
                       </div>
                       
                       <div className="mt-auto flex items-center justify-between w-full relative z-20">
-                          <div className={`w-[30px] h-[30px] rounded-[10px] border-[1.5px] flex items-center justify-center font-bold text-xs pt-[1px] transition-colors duration-500 ${isActive ? 'border-nomad-green bg-nomad-green text-[#000] opacity-100' : 'border-white/20 text-white/60 opacity-80 group-hover:text-nomad-green group-hover:border-nomad-green'}`}>
+                          <div className={`w-[30px] h-[30px] rounded-[10px] border-[1.5px] flex items-center justify-center font-bold text-xs pt-[1px] transition-colors duration-500 ${isActive ? 'border-nomad-green bg-nomad-green text-[#000] opacity-100' : (theme === 'light' ? 'border-[#000]/20 text-[#000]/60 opacity-80 group-hover:text-nomad-green group-hover:border-nomad-green' : 'border-white/20 text-white/60 opacity-80 group-hover:text-nomad-green group-hover:border-nomad-green')}`}>
                              {idx + 1}
                           </div>
                       </div>
 
                       {/* Large Scaled Icon Background */}
-                      <div className="absolute -bottom-8 -right-8 w-40 h-40 text-white/[0.03] transition-transform duration-700 pointer-events-none group-hover:scale-110 z-0">
+                      <div className={`absolute -bottom-8 -right-8 w-40 h-40 transition-transform duration-700 pointer-events-none group-hover:scale-110 z-0 ${theme === 'light' ? 'text-nomad-green/[0.15]' : 'text-nomad-green/[0.05]'}`}>
                         {React.cloneElement(feature.icon as React.ReactElement<any>, { className: 'w-full h-full' })}
                       </div>
                    </div>
 
                    {/* Barcode Area */}
-                   <div className="w-[60px] shrink-0 transition-colors flex items-center justify-end p-3 relative bg-theme-400 overflow-hidden">
+                   <div className={`w-[60px] shrink-0 transition-colors flex items-center justify-end p-3 relative overflow-hidden ${theme === 'light' ? 'bg-[#E5E5E5]' : 'bg-theme-400'}`}>
                        {/* Scanner Line Animation */}
                        {isActive && (
                          <motion.div
                            initial={{ top: "-10%" }}
                            animate={{ top: "110%" }}
                            transition={{ duration: 1.5, ease: "linear", repeat: Infinity, repeatDelay: 1 }}
-                           className="absolute left-0 w-full h-[2px] bg-nomad-green shadow-[0_0_12px_rgba(34,197,94,1)] z-30"
+                           className={`absolute left-0 w-full h-[2px] bg-nomad-green z-30 ${theme === 'light' ? 'shadow-[0_0_12px_rgba(34,197,94,0.5)]' : 'shadow-[0_0_12px_rgba(34,197,94,1)]'}`}
                          />
                        )}
                        
                        {/* Rotated text */}
-                       <span className={`text-[8px] font-mono tracking-widest absolute left-[8px] uppercase transition-colors duration-500 ${isActive ? 'text-nomad-green drop-shadow-[0_0_4px_rgba(34,197,94,0.5)]' : 'text-[#888]'}`} style={{ writingMode: 'vertical-rl' }}>
+                       <span className={`text-[8px] font-mono tracking-widest absolute left-[8px] uppercase transition-colors duration-500 text-nomad-green ${theme === 'light' ? 'drop-shadow-[0_0_2px_rgba(34,197,94,0.2)]' : (isActive ? 'drop-shadow-[0_0_4px_rgba(34,197,94,0.5)]' : '')}`} style={{ writingMode: 'vertical-rl' }}>
                           D8D90DF2F
                        </span>
                        
                        {/* Barcode Lines */}
-                       <div className="flex flex-col flex-1 h-[70%] gap-[2px] justify-center ml-4 opacity-[0.35]">
-                           <div className="w-full h-[2px] bg-black"/>
-                           <div className="w-full h-[4px] bg-black"/>
-                           <div className="w-full h-[1px] bg-black"/>
-                           <div className="w-full h-[3px] bg-black"/>
-                           <div className="w-full h-[1px] bg-black"/>
-                           <div className="w-full h-[5px] bg-black"/>
-                           <div className="w-full h-[2px] bg-black"/>
-                           <div className="w-full h-[1px] bg-black"/>
-                           <div className="w-full h-[4px] bg-black"/>
-                           <div className="w-full h-[2px] bg-black"/>
-                           <div className="w-full h-[1px] bg-black"/>
-                           <div className="w-full h-[3px] bg-black"/>
-                           <div className="w-full h-[2px] bg-black"/>
-                           <div className="w-full h-[1px] bg-black"/>
-                           <div className="w-full h-[3px] bg-black"/>
+                       <div className="flex flex-col flex-1 h-[70%] gap-[2px] justify-center ml-4 opacity-[0.6]">
+                           <div className="w-full h-[2px] bg-nomad-green"/>
+                           <div className="w-full h-[4px] bg-nomad-green"/>
+                           <div className="w-full h-[1px] bg-nomad-green"/>
+                           <div className="w-full h-[3px] bg-nomad-green"/>
+                           <div className="w-full h-[1px] bg-nomad-green"/>
+                           <div className="w-full h-[5px] bg-nomad-green"/>
+                           <div className="w-full h-[2px] bg-nomad-green"/>
+                           <div className="w-full h-[1px] bg-nomad-green"/>
+                           <div className="w-full h-[4px] bg-nomad-green"/>
+                           <div className="w-full h-[2px] bg-nomad-green"/>
+                           <div className="w-full h-[1px] bg-nomad-green"/>
+                           <div className="w-full h-[3px] bg-nomad-green"/>
+                           <div className="w-full h-[2px] bg-nomad-green"/>
+                           <div className="w-full h-[1px] bg-nomad-green"/>
+                           <div className="w-full h-[3px] bg-nomad-green"/>
                        </div>
                    </div>
                   </div>

@@ -165,7 +165,7 @@ export function NavPanelContent({ handleJoin, setCursorVariant, activeSection, i
             onClick={handleJoin}
             onMouseEnter={() => setCursorVariant('waitlist')}
             onMouseLeave={() => setCursorVariant('default')}
-            className="w-full bg-[#FFD700] text-[#000] px-6 py-4 font-black text-sm uppercase tracking-widest cursor-none hover:bg-white transition-colors flex items-center justify-between group shadow-[4px_4px_0px_rgba(0,0,0,0.5)]"
+            className="w-full bg-[#FFD700] text-[#000] px-6 py-4 font-black text-sm uppercase tracking-widest cursor-none hover:bg-nomad-green  hover:text-white transition-colors flex items-center justify-between group shadow-[4px_4px_0px_rgba(0,0,0,0.5)]"
           >
             EARLY ACCESS
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">

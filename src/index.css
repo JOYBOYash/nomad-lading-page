@@ -42,15 +42,15 @@ body {
 
 :root.light {
   --theme-ivory: #111111;
-  --theme-charcoal: #FAFAFA;
+  --theme-charcoal: #EAEAEA;
   --theme-white: #000000;
-  --theme-black: #ffffff;
-  --theme-gray-100: #ffffff;
-  --theme-gray-200: #FCFBFA;
-  --theme-gray-300: #F7F7F7;
-  --theme-gray-400: #F2F2F2;
-  --theme-gray-500: #EDEDED;
-  --theme-gray-600: #E6E6E6;
+  --theme-black: #EEEEEE;
+  --theme-gray-100: #F4F4F4;
+  --theme-gray-200: #EAEAEA;
+  --theme-gray-300: #DFDFDF;
+  --theme-gray-400: #D0D0D0;
+  --theme-gray-500: #C2C2C2;
+  --theme-gray-600: #B4B4B4;
   --theme-ticket-line: #D9D9D9;
 }
 

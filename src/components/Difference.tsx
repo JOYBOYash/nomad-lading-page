@@ -49,7 +49,7 @@ export default function Difference() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="py-24 md:py-32 bg-nomad-charcoal text-nomad-ivory"
+      className={`py-24 md:py-32 ${theme === 'light' ? 'bg-[#F9FAFB] text-[#000]' : 'bg-nomad-charcoal text-nomad-ivory'}`}
     >
       <motion.div 
         variants={{
@@ -68,10 +68,10 @@ export default function Difference() {
              variants={{ hidden: { opacity: 0, x: -30 }, show: { opacity: 1, x: 0, transition: { duration: 0.6 } } }}
              className="w-full flex-1"
           >
-            <h2 className="text-[28px] max-w-full sm:text-[40px] md:text-[60px] lg:text-[70px] font-black font-display uppercase leading-[0.9] tracking-[-0.03em] text-white mb-6 break-words">
+            <h2 className={`text-[28px] max-w-full sm:text-[40px] md:text-[60px] lg:text-[70px] font-black font-display uppercase leading-[0.9] tracking-[-0.03em] ${theme === 'light' ? 'text-[#000]' : 'text-white'} mb-6 break-words`}>
               THE NOMAD <br /> <span className="text-nomad-green">DIFFERENCE.</span>
             </h2>
-            <p className="text-base md:text-[17px] text-white/60 font-medium leading-relaxed max-w-[420px]">
+            <p className={`text-base md:text-[17px] ${theme === 'light' ? 'text-[#000]/60' : 'text-white/60'} font-medium leading-relaxed max-w-[420px]`}>
               Nomad fills the critical gap by combining gamification, rewards, and full organizer authority into a single ecosystem.
             </p>
           </motion.div>
@@ -161,9 +161,9 @@ export default function Difference() {
               const cardBg = isCenter ? 'bg-nomad-green' : (theme === 'light' ? 'bg-[#22c55e]/15' : 'bg-theme-300');
               const cardBorder = isCenter ? 'border-none ring-1 ring-nomad-green/50 shadow-[0_0_40px_rgba(34,197,94,0.15)]' : 'border-nomad-green/30';
               const iconColor = isCenter ? 'text-[#111]' : 'text-nomad-green';
-              const titleColor = isCenter ? 'text-[#111]' : 'text-white';
-              const descColor = isCenter ? 'text-[#000]/80' : 'text-white/60';
-              const dividerColor = isCenter ? 'border-[#111]/10' : 'border-white/10';
+              const titleColor = isCenter ? 'text-[#111]' : (theme === 'light' ? 'text-[#000]' : 'text-white');
+              const descColor = isCenter ? 'text-[#000]/80' : (theme === 'light' ? 'text-[#000]/60' : 'text-white/60');
+              const dividerColor = isCenter ? 'border-[#111]/10' : (theme === 'light' ? 'border-black/10' : 'border-white/10');
 
               return (
                  <motion.div
