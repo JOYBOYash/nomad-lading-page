@@ -211,8 +211,8 @@ export default function FooterCTA() {
 
             <div className="relative z-10 w-full sm:w-auto">
               <h3 className="text-xl sm:text-2xl font-black font-display uppercase tracking-widest text-white mb-8 sm:mb-10 flex flex-col gap-1 sm:gap-2">
-                <span>Reserve Your</span>
-                <span className="text-nomad-green">Priority Access</span>
+                <span>Join the</span>
+                <span className="text-nomad-green">Waitlist</span>
               </h3>
 
               {status === 'success' ? (
@@ -257,6 +257,8 @@ export default function FooterCTA() {
                     <div className="relative">
                       <input 
                         type="text" 
+                        name="name"
+                        autoComplete="name"
                         required
                         value={name}
                         onChange={e => {
@@ -275,6 +277,8 @@ export default function FooterCTA() {
                     <div className="relative">
                       <input 
                         type="email" 
+                        name="email"
+                        autoComplete="email"
                         required
                         value={email}
                         onChange={e => {
@@ -369,7 +373,7 @@ export default function FooterCTA() {
                           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}>
                             <div className="flex items-center justify-center border-2 border-current border-t-transparent rounded-full" style={{ width: 16, height: 16 }} />
                           </motion.div>
-                          <span>Authenticating...</span>
+                          <span>Submitting...</span>
                         </>
                       ) : (
                         <>

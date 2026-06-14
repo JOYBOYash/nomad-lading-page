@@ -37,19 +37,6 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  useEffect(() => {
-    if (isHovered) return;
-    
-    const interval = setInterval(() => {
-      setOpenIndex((current) => {
-        if (current === null) return 0;
-        return (current + 1) % faqs.length;
-      });
-    }, 4000);
-    
-    return () => clearInterval(interval);
-  }, [isHovered]);
-
   return (
     <section className="py-24 md:py-32 bg-nomad-charcoal text-nomad-ivory overflow-hidden relative border-b border-white/5">
       <motion.div 
@@ -117,19 +104,6 @@ export default function FAQ() {
                   </motion.div>
                 )}
               </AnimatePresence>
-
-              {/* Progress Timer Line */}
-              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-transparent">
-                {isOpen && !isHovered && (
-                  <motion.div 
-                    className="h-full bg-nomad-green"
-                    initial={{ width: "0%" }}
-                    animate={{ width: "100%" }}
-                    transition={{ duration: 4, ease: "linear" }}
-                    key={`timer-${index}`}
-                  />
-                )}
-              </div>
             </div>
           )})}
         </div>

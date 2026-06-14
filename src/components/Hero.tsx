@@ -169,6 +169,24 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
   }, [isSoundEnabled, showVideo]);
 
   useEffect(() => {
+    const handleFirstInteraction = () => {
+      if (bgVideoRef.current && isSoundEnabled && !showVideo) {
+        bgVideoRef.current.muted = false;
+        bgVideoRef.current.play().catch(() => {
+          // If it still fails, that's fine, we tried.
+        });
+      }
+    };
+
+    const events = ['click', 'keydown'];
+    events.forEach(event => document.addEventListener(event, handleFirstInteraction, { once: true }));
+
+    return () => {
+      events.forEach(event => document.removeEventListener(event, handleFirstInteraction));
+    };
+  }, [isSoundEnabled, showVideo]);
+
+  useEffect(() => {
     if ((isMenuOpen && typeof window !== 'undefined' && window.innerWidth < 1024) || showVideo) {
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
@@ -372,12 +390,14 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
                   onClick={() => setShowVideo(true)}
                   onMouseEnter={() => setCursorVariant('hover')}
                   onMouseLeave={() => setCursorVariant('default')}
-                  className="group flex flex-row items-center gap-6 backdrop-blur-md bg-[#111]/40 hover:bg-nomad-green border border-white/10 hover:border-nomad-green rounded-full p-2 pr-8 md:pr-10 cursor-none transition-colors duration-500 hover:shadow-[0_0_40px_rgba(34,197,94,0.3)] shadow-2xl w-fit"
+                  className="group flex flex-row items-center justify-between gap-4 sm:gap-8 backdrop-blur-md bg-white/5 hover:bg-nomad-green border border-white/10 hover:border-nomad-green rounded-full p-2 pl-6 sm:pl-8 cursor-none transition-colors duration-500 hover:shadow-[0_0_40px_rgba(34,197,94,0.3)] shadow-xl overflow-hidden max-w-[90vw]"
                 >
-                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-nomad-green group-hover:bg-[#111] flex items-center justify-center text-[#111] group-hover:text-nomad-green transition-colors duration-500 shadow-[0_0_20px_rgba(34,197,94,0.4)] group-hover:shadow-none shrink-0">
-                    <Play className="w-5 h-5 md:w-6 md:h-6 ml-1" fill="currentColor" />
+                  <span className="text-white group-hover:text-[#111] text-xs sm:text-sm md:text-base font-black uppercase tracking-[0.1em] transition-colors duration-500 whitespace-nowrap overflow-hidden text-ellipsis">
+                    Watch Announcement
+                  </span>
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-nomad-green group-hover:bg-[#111] flex items-center justify-center text-[#111] group-hover:text-nomad-green transition-colors duration-500 shrink-0">
+                    <Play className="w-4 h-4 sm:w-5 sm:h-5 ml-1" fill="currentColor" />
                   </div>
-                  <span className="text-white group-hover:text-[#111] text-[13px] sm:text-[15px] md:text-lg font-black uppercase tracking-wider md:tracking-[0.1em] transition-colors duration-500 whitespace-nowrap">Watch App Announcement</span>
                 </motion.button>
 
                 <div className="relative flex justify-center pb-12 w-full">

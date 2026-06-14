@@ -19,17 +19,17 @@ export default function Problem() {
     {
       title: "Scattered Apps",
       desc: "Attendees juggle multiple apps just to find what's happening. Broken navigation means endless confusion.",
-      image: "https://images.unsplash.com/photo-1555774698-0b77e0d5fac6?q=80&w=1200&auto=format&fit=crop"
+      image: "https://images.pexels.com/photos/147413/twitter-facebook-together-exchange-of-information-147413.jpeg"
     },
     {
       title: "Low Traffic",
       desc: "Organizers fight low booth traffic and poor crowd control with passive attendees.",
-      image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?q=80&w=1200&auto=format&fit=crop"
+      image: "https://images.pexels.com/photos/35138560/pexels-photo-35138560.jpeg"
     },
     {
       title: "Wasted Budgets",
       desc: "Sponsors wasting budgets with zero measurable ROI as booths get ignored.",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200&auto=format&fit=crop"
+      image: "https://images.pexels.com/photos/7054391/pexels-photo-7054391.jpeg"
     }
   ];
 
@@ -126,7 +126,7 @@ export default function Problem() {
                             transition={{ duration: 0.4, ease: "easeInOut" }}
                             className="overflow-hidden"
                           >
-                            <p className="text-white/60 font-bold leading-relaxed max-w-lg text-sm md:text-base pr-8 pt-4 pb-2 pointer-events-none">
+                            <p className="text-white/60 font-bold leading-relaxed max-w-lg text-sm md:text-base pr-8 pt-4 pb-2 pointer-events-none min-h-[80px] sm:min-h-[72px]">
                                {item.desc}
                             </p>
                           </motion.div>

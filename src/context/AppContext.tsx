@@ -154,15 +154,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const handleGlobalTrigger = (e: Event) => {
       const target = e.target as HTMLElement;
-      if (target.closest('button, a, select, [role="button"], .cursor-none, [tabindex]')) {
+      if (target.closest('button, a, select, [role="button"], input[type="button"], input[type="submit"]')) {
         playClick();
       }
     };
     
     // Use capture phase for immediate response
-    document.addEventListener('pointerdown', handleGlobalTrigger, true);
+    document.addEventListener('click', handleGlobalTrigger, true);
     return () => {
-      document.removeEventListener('pointerdown', handleGlobalTrigger, true);
+      document.removeEventListener('click', handleGlobalTrigger, true);
     };
   }, [isSoundEnabled]);
 
