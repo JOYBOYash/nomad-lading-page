@@ -55,7 +55,7 @@ export default function Problem() {
         {/* Header Section mimicking the reference */}
         <div className="mb-16 md:mb-24 flex flex-col items-start max-w-5xl">
           <motion.div variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}>
-            <div className="text-sm font-bold uppercase tracking-widest text-[#FFD700] mb-4">The Real Problem</div>
+            <div className="text-sm font-bold uppercase tracking-widest text-nomad-green mb-4">The Real Problem</div>
             <h2 className="text-[32px] sm:text-[44px] md:text-[60px] lg:text-[80px] font-display font-black uppercase tracking-tighter leading-[0.9] text-white mb-6">
               EVENTS TODAY ARE <span className="text-nomad-green">STUCK</span> <br className="hidden md:block"/>
               IN THE PAST
@@ -72,7 +72,7 @@ export default function Problem() {
           {/* Left Large Image */}
           <motion.div 
             variants={{ hidden: { opacity: 0, scale: 0.95 }, show: { opacity: 1, scale: 1, transition: { duration: 0.6 } } }}
-            className="w-full aspect-square md:aspect-[4/3] lg:aspect-square relative rounded-[2rem] overflow-hidden bg-[#111]"
+            className="w-full aspect-square md:aspect-[4/3] lg:aspect-square relative rounded-[2rem] overflow-hidden bg-theme-100"
           >
              <AnimatePresence mode="wait">
                <motion.img 
@@ -108,10 +108,10 @@ export default function Problem() {
                            animate={{ 
                              rotate: isActive ? 90 : 0,
                              scale: isActive ? 1.2 : 1,
-                             color: isActive ? '#22c55e' : 'rgba(255,255,255,0.4)' 
+                              
                            }}
                            transition={{ duration: 0.4, ease: "easeOut" }}
-                           className="text-4xl font-black origin-center select-none"
+                           className={"text-4xl font-black origin-center select-none transition-colors duration-300 " + (isActive ? "text-nomad-green" : "text-white/40")}
                          >
                             *
                          </motion.div>

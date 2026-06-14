@@ -37,7 +37,7 @@ const differenceCards = [
 ];
 
 export default function Difference() {
-  const { playHover, setCursorVariant } = useAppContext();
+  const { playHover, setCursorVariant, theme } = useAppContext();
   const [centerIndex, setCenterIndex] = useState(0);
 
   const nextPage = () => setCenterIndex((prev) => (prev + 1) % differenceCards.length);
@@ -49,7 +49,7 @@ export default function Difference() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="py-24 md:py-32 bg-nomad-charcoal text-white"
+      className="py-24 md:py-32 bg-nomad-charcoal text-nomad-ivory"
     >
       <motion.div 
         variants={{
@@ -69,9 +69,9 @@ export default function Difference() {
              className="w-full flex-1"
           >
             <h2 className="text-[28px] max-w-full sm:text-[40px] md:text-[60px] lg:text-[70px] font-black font-display uppercase leading-[0.9] tracking-[-0.03em] text-white mb-6 break-words">
-              THE NOMAD <br /> DIFFERENCE.
+              THE NOMAD <br /> <span className="text-nomad-green">DIFFERENCE.</span>
             </h2>
-            <p className="text-base md:text-[17px] text-[#9ca3af] font-medium leading-relaxed max-w-[420px]">
+            <p className="text-base md:text-[17px] text-white/60 font-medium leading-relaxed max-w-[420px]">
               Nomad fills the critical gap by combining gamification, rewards, and full organizer authority into a single ecosystem.
             </p>
           </motion.div>
@@ -84,7 +84,7 @@ export default function Difference() {
                onClick={prevPage}
                onMouseEnter={() => {playHover(); setCursorVariant('hover');}}
                onMouseLeave={() => setCursorVariant('default')}
-               className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/10 bg-[#1c1c1c] flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-none pointer-events-auto"
+               className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/10 bg-theme-300 flex items-center justify-center text-white hover:bg-white/10 transition-colors cursor-none pointer-events-auto"
              >
                 <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
              </button>
@@ -112,16 +112,13 @@ export default function Difference() {
               const isCenter = offset === 0;
               const isLeft = offset === -1;
               const isRight = offset === 1;
-              const isVisible = isCenter || isLeft || isRight;
+              const isVisible = Math.abs(offset) <= 2;
 
               // positions
               let xPos = "0%";
               let scale = 0.9;
-              let opacity = 0;
+                            let opacity = 0;
               let zIndex = 0;
-
-              const sideOffset = "105%";
-              const mobileSideOffset = "115%";
 
               if (isCenter) {
                 xPos = "0%";
@@ -131,32 +128,42 @@ export default function Difference() {
               } else if (isLeft) {
                 xPos = "-105%";
                 scale = 0.85;
-                opacity = 0.2;
+                opacity = 0.6;
                 zIndex = 10;
               } else if (isRight) {
                 xPos = "105%";
                 scale = 0.85;
-                opacity = 0.2;
+                opacity = 0.6;
                 zIndex = 10;
-              } else if (offset < -1) {
-                xPos = "-200%";
-                scale = 0.8;
+              } else if (offset === -2) {
+                xPos = "-210%";
+                scale = 0.7;
+                opacity = 0.25;
+                zIndex = 5;
+              } else if (offset === 2) {
+                xPos = "210%";
+                scale = 0.7;
+                opacity = 0.25;
+                zIndex = 5;
+              } else if (offset < -2) {
+                xPos = "-280%";
+                scale = 0.5;
                 opacity = 0;
                 zIndex = 0;
               } else {
-                xPos = "200%";
-                scale = 0.8;
+                xPos = "280%";
+                scale = 0.5;
                 opacity = 0;
                 zIndex = 0;
               }
 
               // Card Theme reversing for center
-              const cardBg = isCenter ? 'bg-nomad-green' : 'bg-[#1c1c1c]';
+              const cardBg = isCenter ? 'bg-nomad-green' : (theme === 'light' ? 'bg-[#22c55e]/15' : 'bg-theme-300');
               const cardBorder = isCenter ? 'border-none ring-1 ring-nomad-green/50 shadow-[0_0_40px_rgba(34,197,94,0.15)]' : 'border-nomad-green/30';
               const iconColor = isCenter ? 'text-[#111]' : 'text-nomad-green';
               const titleColor = isCenter ? 'text-[#111]' : 'text-white';
-              const descColor = isCenter ? 'text-[#111]/80' : 'text-[#a1a1aa]';
-              const dividerColor = isCenter ? 'border-[#111]/10' : 'border-white/5';
+              const descColor = isCenter ? 'text-[#000]/80' : 'text-white/60';
+              const dividerColor = isCenter ? 'border-[#111]/10' : 'border-white/10';
 
               return (
                  <motion.div
@@ -166,6 +173,7 @@ export default function Difference() {
                       scale: isCenter ? 1.05 : scale, // Slight bump on center
                       opacity: opacity,
                       zIndex: zIndex,
+                      filter: isCenter ? "blur(0px)" : "blur(4px)",
                     }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     style={{ 
@@ -182,8 +190,8 @@ export default function Difference() {
                       <>
                         <div className="absolute top-[-50px] right-[-50px] w-32 h-32 bg-white/20 blur-3xl rounded-full" />
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-b from-transparent to-[#111]/5 pointer-events-none" />
-                        <div className="absolute top-6 right-6 w-2 h-2 rounded-full bg-[#111] opacity-20" />
-                        <div className="absolute bottom-6 left-6 w-2 h-2 rounded-full bg-[#111] opacity-20" />
+                        <div className="absolute top-6 right-6 w-2 h-2 rounded-full bg-theme-100 opacity-20" />
+                        <div className="absolute bottom-6 left-6 w-2 h-2 rounded-full bg-theme-100 opacity-20" />
                       </>
                     )}
                     {!isCenter && (

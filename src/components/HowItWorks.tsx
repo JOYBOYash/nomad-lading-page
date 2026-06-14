@@ -67,7 +67,7 @@ export default function HowItWorks() {
                 {/* Number Circle Column */}
                 <div className="flex justify-center shrink-0 mr-4 md:mr-8 w-14 md:w-20">
                    {/* Number Circle */}
-                   <div className={`w-14 h-14 md:w-20 md:h-20 rounded-full flex items-center justify-center border-[1.5px] font-black font-sans text-xl md:text-3xl transition-all duration-500 z-10 shrink-0 ${isActive ? 'border-nomad-green text-nomad-green bg-[#111] shadow-[0_0_25px_rgba(34,197,94,0.25)] scale-[1.15]' : 'border-white/10 text-white/30 bg-[#111] group-hover:border-white/30 group-hover:text-white/50'}`}>
+                   <div className={`w-14 h-14 md:w-20 md:h-20 rounded-full flex items-center justify-center border-[1.5px] font-black font-sans text-xl md:text-3xl transition-all duration-500 z-10 shrink-0 ${isActive ? 'border-nomad-green text-nomad-green bg-theme-100 shadow-[0_0_25px_rgba(34,197,94,0.25)] scale-[1.15]' : 'border-white/10 text-white/30 bg-theme-100 group-hover:border-white/30 group-hover:text-white/50'}`}>
                      {step.num}
                    </div>
                 </div>
@@ -76,7 +76,7 @@ export default function HowItWorks() {
                 <div className="flex-1">
                   <motion.div
                     animate={isActive ? { scale: 1.02 } : { scale: 1 }}
-                    className={`w-full h-full text-white p-6 md:p-8 rounded-[2rem] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 overflow-hidden relative cursor-pointer border transition-colors duration-500 bg-[#111] ${isActive ? 'border-nomad-green/50 shadow-[0_0_30px_rgba(34,197,94,0.1)]' : 'border-white/5 group-hover:border-white/10'}`}
+                    className={`w-full h-full text-white p-6 md:p-8 rounded-[2rem] flex flex-col md:flex-row items-start md:items-center justify-between gap-6 overflow-hidden relative cursor-pointer border transition-colors duration-500 bg-theme-100 ${isActive ? 'border-nomad-green/50 shadow-[0_0_30px_rgba(34,197,94,0.1)]' : 'border-white/5 group-hover:border-white/10'}`}
                   >
                     <div className={`absolute inset-0 transition-colors duration-500 ${isActive ? 'bg-nomad-green/5' : 'bg-nomad-green/0'}`} />
                     

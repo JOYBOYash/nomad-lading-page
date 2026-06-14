@@ -178,7 +178,7 @@ export default function FooterCTA() {
               </ul>
             </div>
 
-            <div className="inline-flex items-center self-start gap-3 bg-[#111] border border-white/10 px-4 sm:px-6 py-3 sm:py-4 rounded-full mt-auto">
+            <div className="inline-flex items-center self-start gap-3 bg-theme-100 border border-white/10 px-4 sm:px-6 py-3 sm:py-4 rounded-full mt-auto">
                <span className="relative flex h-2 w-2">
                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-nomad-green opacity-75"></span>
                  <span className="relative inline-flex rounded-full h-2 w-2 bg-nomad-green"></span>

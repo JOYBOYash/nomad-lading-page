@@ -9,6 +9,8 @@ interface AppContextType {
   setIsSoundEnabled: (enabled: boolean) => void;
   cursorVariant: 'default' | 'hover' | 'waitlist';
   setCursorVariant: (variant: 'default' | 'hover' | 'waitlist') => void;
+  theme: 'dark' | 'light';
+  toggleTheme: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -16,6 +18,27 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 export function AppProvider({ children }: { children: ReactNode }) {
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
   const [cursorVariant, setCursorVariant] = useState<'default' | 'hover' | 'waitlist'>('default');
+  
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('theme');
+      if (stored === 'light' || stored === 'dark') return stored;
+    }
+    return 'light'; // default theme
+  });
+
+  useEffect(() => {
+    if (theme === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  }, []);
   
   const audioCtxRef = useRef<AudioContext | null>(null);
 
@@ -167,7 +190,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   }, [isSoundEnabled, playClick]);
 
   return (
-    <AppContext.Provider value={{ isSoundEnabled, toggleSound, setIsSoundEnabled, playHover, playClick, playPop, cursorVariant, setCursorVariant }}>
+    <AppContext.Provider value={{ isSoundEnabled, toggleSound, setIsSoundEnabled, playHover, playClick, playPop, cursorVariant, setCursorVariant, theme, toggleTheme }}>
       {children}
     </AppContext.Provider>
   );

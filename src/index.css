@@ -1,13 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: #000000;
-  color: #F8F5F0;
+  background-color: var(--theme-black);
+  color: var(--theme-ivory);
   overflow-x: hidden;
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
@@ -25,12 +26,51 @@ body {
   scrollbar-width: none !important;
 }
 
+:root {
+  --theme-ivory: #F8F5F0;
+  --theme-charcoal: #1F1F1F;
+  --theme-white: #ffffff;
+  --theme-black: #000000;
+  --theme-gray-100: #111111;
+  --theme-gray-200: #161616;
+  --theme-gray-300: #1c1c1c;
+  --theme-gray-400: #262626;
+  --theme-gray-500: #2a2a2a;
+  --theme-gray-600: #333333;
+  --theme-ticket-line: #1a1a1a;
+}
+
+:root.light {
+  --theme-ivory: #111111;
+  --theme-charcoal: #FAFAFA;
+  --theme-white: #000000;
+  --theme-black: #ffffff;
+  --theme-gray-100: #ffffff;
+  --theme-gray-200: #FCFBFA;
+  --theme-gray-300: #F7F7F7;
+  --theme-gray-400: #F2F2F2;
+  --theme-gray-500: #EDEDED;
+  --theme-gray-600: #E6E6E6;
+  --theme-ticket-line: #D9D9D9;
+}
+
 @theme {
-  --color-nomad-ivory: #F8F5F0;
-  --color-nomad-charcoal: #1F1F1F;
+  --color-nomad-ivory: var(--theme-ivory);
+  --color-nomad-charcoal: var(--theme-charcoal);
   --color-nomad-green: #22C55E; 
   --color-nomad-green-dark: #16A34A;
   
+  --color-white: var(--theme-white);
+  --color-black: var(--theme-black);
+  
+  --color-theme-100: var(--theme-gray-100);
+  --color-theme-200: var(--theme-gray-200);
+  --color-theme-300: var(--theme-gray-300);
+  --color-theme-400: var(--theme-gray-400);
+  --color-theme-500: var(--theme-gray-500);
+  --color-theme-600: var(--theme-gray-600);
+  --color-theme-ticket: var(--theme-ticket-line);
+
   --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
 }
@@ -50,5 +90,33 @@ body {
   .text-stroke-ivory {
     -webkit-text-stroke-color: #F8F5F0;
   }
+}
+
+/* ReactQuill overrides for dark mode style */
+.ql-toolbar.ql-snow {
+  background-color: #1F1F1F !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-bottom: none !important;
+}
+
+.ql-toolbar.ql-snow .ql-stroke {
+  stroke: #F8F5F0 !important;
+}
+.ql-toolbar.ql-snow .ql-fill {
+  fill: #F8F5F0 !important;
+}
+.ql-toolbar.ql-snow .ql-picker {
+  color: #F8F5F0 !important;
+}
+.ql-container.ql-snow {
+  background-color: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #F8F5F0 !important;
+  font-family: inherit !important;
+  font-size: 1rem !important;
+}
+.ql-editor.ql-blank::before {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-style: normal !important;
 }
 

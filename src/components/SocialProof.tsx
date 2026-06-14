@@ -2,10 +2,12 @@ import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { ChevronLeft, ChevronRight, Users, Target, Briefcase, Award, Megaphone, Globe } from 'lucide-react';
 import WorldMap from './WorldMap';
+import { useAppContext } from '../context/AppContext';
 
 export default function SocialProof() {
+  const { theme } = useAppContext();
   return (
-    <section className="py-24 md:py-32 bg-nomad-charcoal text-nomad-ivory overflow-x-clip relative border-b border-nomad-charcoal/10">
+    <section className="pt-24 md:pt-32 pb-0 bg-nomad-charcoal text-nomad-ivory overflow-x-clip relative border-b border-nomad-charcoal/10">
       
       {/* Cross out lines section container */}
       <div className="relative w-full flex flex-col items-center justify-center pt-16 mb-12 md:mb-16">
@@ -18,7 +20,7 @@ export default function SocialProof() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="relative z-10 text-center mb-16 md:mb-24 px-6"
         >
-          <h2 className="text-[32px] sm:text-[40px] md:text-[60px] lg:text-[70px] font-black font-display uppercase tracking-[-0.03em] leading-[0.9] text-white">
+          <h2 className={`text-[32px] sm:text-[40px] md:text-[60px] lg:text-[70px] font-black font-display uppercase tracking-[-0.03em] leading-[0.9] text-white`}>
             Live your life <br className="hidden md:block" />
             <span className="text-nomad-green">like a Nomad!</span>
           </h2>
@@ -107,7 +109,7 @@ export default function SocialProof() {
            {/* Card 1: Social Connections */}
            <motion.div 
              variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } }}
-             className="lg:col-span-6 relative rounded-[2rem] bg-[#161616] p-8 md:p-12 flex flex-col items-center justify-center text-center overflow-hidden group border border-white/5 hover:border-nomad-green/30 transition-colors duration-500 min-h-[400px]"
+             className={`lg:col-span-6 relative rounded-[2rem] bg-theme-200 p-8 md:p-12 flex flex-col items-center justify-center text-center overflow-hidden group border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:border-nomad-green/30 hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] transition-colors duration-500`}
            >
               {/* Top Left Icon Box */}
               <div className="absolute top-8 left-8 w-12 h-12 rounded-full border border-nomad-green/20 flex items-center justify-center text-nomad-green group-hover:scale-110 transition-transform duration-500 z-20">
@@ -120,10 +122,10 @@ export default function SocialProof() {
               </div>
 
               <div className="relative z-10 max-w-sm mt-12 md:mt-8">
-                 <h3 className="text-[28px] md:text-[36px] font-black font-display uppercase tracking-tight text-white leading-[1.1] mb-6 group-hover:text-nomad-green transition-colors duration-500">
+                 <h3 className={`text-[28px] md:text-[36px] font-black font-display uppercase tracking-tight text-white leading-[1.1] mb-6 group-hover:text-nomad-green transition-colors duration-500`}>
                    SQUAD UP. <br/> NEVER WANDER ALONE.
                  </h3>
-                 <p className="text-white/60 font-medium text-[15px] leading-relaxed">
+                 <p className={`text-white/60 font-medium text-[15px] leading-relaxed`}>
                    Sync with friends, forge new alliances, and coordinate meetups effortlessly. Follow attendees and map out your ultimate event experience as a united frontline.
                  </p>
               </div>
@@ -132,7 +134,7 @@ export default function SocialProof() {
            {/* Card 2: Group Missions */}
            <motion.div 
              variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } }}
-             className="lg:col-span-6 relative rounded-[2rem] bg-[#161616] p-8 md:p-12 flex flex-col items-center justify-center text-center overflow-hidden group border border-white/5 hover:border-nomad-green/30 transition-colors duration-500 min-h-[400px]"
+             className={`lg:col-span-6 relative rounded-[2rem] bg-theme-200 p-8 md:p-12 flex flex-col items-center justify-center text-center overflow-hidden group border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:border-nomad-green/30 hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] transition-colors duration-500`}
            >
               {/* Top Left Icon Box */}
               <div className="absolute top-8 left-8 w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/80 group-hover:text-white group-hover:border-white/30 group-hover:scale-110 transition-all duration-500 z-20">
@@ -145,10 +147,10 @@ export default function SocialProof() {
               </div>
 
               <div className="relative z-10 max-w-sm mt-12 md:mt-8">
-                 <h3 className="text-[28px] md:text-[36px] font-black font-display uppercase tracking-tight text-white leading-[1.1] mb-6 group-hover:text-nomad-green transition-colors">
+                 <h3 className={`text-[28px] md:text-[36px] font-black font-display uppercase tracking-tight text-white leading-[1.1] mb-6 group-hover:text-nomad-green transition-colors`}>
                    CO-OP <br/> MISSIONS
                  </h3>
-                 <p className="text-white/60 font-medium text-[15px] leading-relaxed">
+                 <p className={`text-white/60 font-medium text-[15px] leading-relaxed`}>
                    Gather your crew. Tackle massive group-based geolocation challenges block-by-block and reap colossal token bounties together.
                  </p>
               </div>
@@ -157,7 +159,7 @@ export default function SocialProof() {
            {/* Card 3: Professional Flex */}
            <motion.div 
              variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } }}
-             className="lg:col-span-4 relative rounded-[2rem] bg-[#161616] p-8 md:p-12 flex flex-col items-center justify-center text-center overflow-hidden group border border-white/5 hover:border-nomad-green/30 transition-colors duration-500 min-h-[350px]"
+             className={`lg:col-span-4 relative rounded-[2rem] bg-theme-200 p-8 md:p-12 flex flex-col items-center justify-center text-center overflow-hidden group border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:border-nomad-green/30 hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] transition-colors duration-500`}
            >
               <div className="absolute top-8 left-8 w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/80 group-hover:text-white group-hover:border-white/30 group-hover:scale-110 transition-all duration-500 z-20">
                  <Briefcase size={20} />
@@ -168,10 +170,10 @@ export default function SocialProof() {
               </div>
 
               <div className="relative z-10 mt-12 md:mt-8">
-                 <h3 className="text-[22px] md:text-[26px] font-black font-display uppercase tracking-tight text-white leading-[1.15] mb-5 group-hover:text-nomad-green transition-colors">
+                 <h3 className={`text-[22px] md:text-[26px] font-black font-display uppercase tracking-tight text-white leading-[1.15] mb-5 group-hover:text-nomad-green transition-colors`}>
                    THE PROFESSIONAL <br/> FLEX
                  </h3>
-                 <p className="text-white/60 font-medium text-[14px] leading-relaxed">
+                 <p className={`text-white/60 font-medium text-[14px] leading-relaxed`}>
                    Link your LinkedIn & GitHub. Turn physical handshakes into digital authority by publicly showcasing your elite event connections.
                  </p>
               </div>
@@ -180,7 +182,7 @@ export default function SocialProof() {
            {/* Card 4: Creator Elite */}
            <motion.div 
              variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } }}
-             className="lg:col-span-4 relative rounded-[2rem] bg-[#161616] p-8 md:p-12 flex flex-col items-center justify-center text-center overflow-hidden group border border-white/5 hover:border-nomad-green/30 transition-colors duration-500 min-h-[350px]"
+             className={`lg:col-span-4 relative rounded-[2rem] bg-theme-200 p-8 md:p-12 flex flex-col items-center justify-center text-center overflow-hidden group border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:border-nomad-green/30 hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] transition-colors duration-500`}
            >
               <div className="absolute top-8 left-8 w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/80 group-hover:text-white group-hover:border-white/30 group-hover:scale-110 transition-all duration-500 z-20">
                  <Award size={20} />
@@ -191,10 +193,10 @@ export default function SocialProof() {
               </div>
 
               <div className="relative z-10 mt-12 md:mt-8">
-                 <h3 className="text-[22px] md:text-[26px] font-black font-display uppercase tracking-tight text-white leading-[1.15] mb-5 group-hover:text-nomad-green transition-colors">
+                 <h3 className={`text-[22px] md:text-[26px] font-black font-display uppercase tracking-tight text-white leading-[1.15] mb-5 group-hover:text-nomad-green transition-colors`}>
                    THE CREATOR <br/> ELITE
                  </h3>
-                 <p className="text-white/60 font-medium text-[14px] leading-relaxed mt-auto">
+                 <p className={`text-white/60 font-medium text-[14px] leading-relaxed mt-auto`}>
                    Approved creators become event royalty. Generate hype, drive traffic, and get rewarded with hyper-exclusive loot and VIP access.
                  </p>
               </div>
@@ -203,7 +205,7 @@ export default function SocialProof() {
            {/* Card 5: Thriving Ecosystem */}
            <motion.div 
              variants={{ hidden: { opacity: 0, y: 40 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } } }}
-             className="lg:col-span-4 relative rounded-[2rem] bg-[#161616] p-8 md:p-12 flex flex-col items-center justify-center text-center overflow-hidden group border border-white/5 hover:border-nomad-green/30 transition-colors duration-500 min-h-[350px]"
+             className={`lg:col-span-4 relative rounded-[2rem] bg-theme-200 p-8 md:p-12 flex flex-col items-center justify-center text-center overflow-hidden group border border-white/5 shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:border-nomad-green/30 hover:shadow-[0_0_25px_rgba(34,197,94,0.2)] transition-colors duration-500`}
            >
               <div className="absolute top-8 left-8 w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-white/80 group-hover:text-white group-hover:border-white/30 group-hover:scale-110 transition-all duration-500 z-20">
                  <Globe size={20} />
@@ -214,10 +216,10 @@ export default function SocialProof() {
               </div>
 
               <div className="relative z-10 mt-12 md:mt-8">
-                 <h3 className="text-[22px] md:text-[26px] font-black font-display uppercase tracking-tight text-white leading-[1.15] mb-5 group-hover:text-nomad-green transition-colors">
+                 <h3 className={`text-[22px] md:text-[26px] font-black font-display uppercase tracking-tight text-white leading-[1.15] mb-5 group-hover:text-nomad-green transition-colors`}>
                    A THRIVING <br/> ECOSYSTEM
                  </h3>
-                 <p className="text-white/60 font-medium text-[14px] leading-relaxed mt-auto">
+                 <p className={`text-white/60 font-medium text-[14px] leading-relaxed mt-auto`}>
                    We engineer an unstoppable flywheel where organizers, sponsors, creators, and every single participant wins together.
                  </p>
               </div>
@@ -228,7 +230,7 @@ export default function SocialProof() {
       </div>
 
       {/* World Map Section */}
-      <div className="w-full relative z-10 pt-12 md:pt-24 mt-12 md:mt-0 pb-20">
+      <div className="w-full relative z-10">
          <WorldMap />
       </div>
     </section>

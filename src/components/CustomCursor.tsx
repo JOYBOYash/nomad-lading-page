@@ -47,6 +47,7 @@ export default function CustomCursor() {
       x: "-50%",
       y: "-50%",
       width: 12,
+      filter: "drop-shadow(0px 4px 6px rgba(0,0,0,0.3))",
       height: 12,
       backgroundColor: "#22c55e",
       borderRadius: "0%",
@@ -59,6 +60,7 @@ export default function CustomCursor() {
       width: 24,
       height: 24,
       backgroundColor: "transparent",
+      filter: "drop-shadow(0px 4px 6px rgba(0,0,0,0.3))",
       borderRadius: "0%",
       rotate: 135,
       border: "2px solid #22c55e",
@@ -69,6 +71,7 @@ export default function CustomCursor() {
       width: 60,
       height: 60,
       backgroundColor: "rgba(34, 197, 94, 0.2)",
+      filter: "drop-shadow(0px 4px 6px rgba(0,0,0,0.3))",
       borderRadius: "0%",
       rotate: -45,
       border: "2px dashed #22c55e",
@@ -77,7 +80,7 @@ export default function CustomCursor() {
 
   return (
     <motion.div
-      className="fixed top-0 left-0 pointer-events-none z-[9999] flex items-center justify-center mix-blend-screen"
+      className="fixed top-0 left-0 pointer-events-none z-[9999] flex items-center justify-center"
       style={{ x: cursorX, y: cursorY }}
     >
       <motion.div

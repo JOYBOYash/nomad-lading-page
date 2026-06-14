@@ -2,9 +2,12 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 
+import GlobalNav from '../components/GlobalNav';
+
 export default function PrivacyPolicy() {
   return (
     <div className="pt-32 pb-24 px-6 max-w-4xl mx-auto min-h-screen text-white/80 font-medium">
+      <GlobalNav />
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

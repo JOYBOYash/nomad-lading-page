@@ -63,7 +63,7 @@ export default function Timeline() {
     <section className="py-24 bg-nomad-charcoal text-nomad-ivory relative border-b border-white/5 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="mb-16 text-center px-4">
-          <h2 className="text-sm font-bold uppercase tracking-widest text-[#FFD700] mb-4">The Roadmap</h2>
+          <h2 className="text-sm font-bold uppercase tracking-widest text-nomad-green mb-4">The Roadmap</h2>
           <h3 className="text-2xl sm:text-4xl md:text-5xl font-display font-black uppercase tracking-tighter text-white mb-6 leading-none">
             Countdown to <br className="sm:hidden" />
             <span className="text-nomad-green">Launch</span>
@@ -97,11 +97,11 @@ export default function Timeline() {
                 className="flex flex-row lg:flex-col items-start lg:items-center relative w-full lg:w-1/4"
               >
                 <div className="hidden lg:block absolute top-0 w-full h-[60px] cursor-default">
-                   <div className={`absolute left-1/2 top-[28px] w-4 h-4 rounded-full -translate-x-1/2 -translate-y-1/2 z-10 transition-transform duration-300 hover:scale-150 ${isPassed ? 'bg-nomad-green shadow-[0_0_15px_rgba(0,255,102,0.5)]' : 'bg-[#333] border-2 border-white/20'}`}></div>
+                   <div className={`absolute left-1/2 top-[28px] w-4 h-4 rounded-full -translate-x-1/2 -translate-y-1/2 z-10 transition-transform duration-300 hover:scale-150 ${isPassed ? 'bg-nomad-green shadow-[0_0_15px_rgba(0,255,102,0.5)]' : 'bg-theme-600 border-2 border-white/20'}`}></div>
                 </div>
 
                 <div className="lg:hidden w-[2px] bg-white/10 absolute top-0 bottom-0 left-[7px] z-0"></div>
-                <div className={`lg:hidden absolute left-[7px] top-6 w-4 h-4 rounded-full -translate-x-1/2 z-10 ${isPassed ? 'bg-nomad-green shadow-[0_0_15px_rgba(0,255,102,0.5)]' : 'bg-[#333] border-2 border-white/20'}`}></div>
+                <div className={`lg:hidden absolute left-[7px] top-6 w-4 h-4 rounded-full -translate-x-1/2 z-10 ${isPassed ? 'bg-nomad-green shadow-[0_0_15px_rgba(0,255,102,0.5)]' : 'bg-theme-600 border-2 border-white/20'}`}></div>
 
                 <div className="pl-8 lg:pl-0 pt-0 lg:pt-16 lg:text-center flex flex-col items-start lg:items-center relative w-full">
                   <div className={`font-mono text-sm tracking-widest uppercase mb-2 ${isPassed ? 'text-nomad-green' : 'text-white/40'}`}>

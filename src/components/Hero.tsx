@@ -3,8 +3,13 @@
  */
 import { createPortal } from 'react-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'motion/react';
-import { ArrowDown, Play, Menu, X, Volume2, VolumeX } from 'lucide-react';
+import { ArrowDown, Play, Menu, X, Volume2, VolumeX, ChevronLeft, ChevronRight, Newspaper, Sun, Moon } from 'lucide-react';
 import { FormEvent, useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { db } from '../lib/firebase';
+import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { BlogPost } from '../types/blog';
+import { formatImageUrl } from '../lib/utils';
 import { useAppContext } from '../context/AppContext';
 import assets from '../config/assets.json';
 import { useCountdown } from './Countdown';
@@ -42,12 +47,16 @@ const CountdownBadge = () => {
   );
 };
 
-function scrollToSection(id: string) {
+export function scrollToSection(id: string) {
+  if (window.location.pathname !== '/') {
+    window.location.href = `/#${id}`;
+    return;
+  }
   const el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
 
-function NavPanelContent({ handleJoin, setCursorVariant, activeSection, isSoundEnabled, toggleSound }: any) {
+export function NavPanelContent({ handleJoin, setCursorVariant, activeSection, isSoundEnabled, toggleSound, setIsMenuOpen, theme, toggleTheme }: any) {
   const sections = [
     { id: 'home', label: 'HOME' },
     { id: 'problem', label: 'THE PROBLEM' },
@@ -55,8 +64,44 @@ function NavPanelContent({ handleJoin, setCursorVariant, activeSection, isSoundE
     { id: 'features', label: 'FEATURES' },
     { id: 'how-it-works', label: 'HOW IT WORKS' },
     { id: 'wall-of-fame', label: 'WALL OF FAME' },
+    { id: 'blog', label: 'LATEST NEWS' },
     { id: 'faq', label: 'FAQ' }
   ];
+
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [currentPostIndex, setCurrentPostIndex] = useState(0);
+
+  useEffect(() => {
+    const fetchLatestPosts = async () => {
+      try {
+        if (!db) return;
+        const q = query(collection(db, 'blogs'), orderBy('createdAt', 'desc'), limit(3));
+        const querySnapshot = await getDocs(q);
+        const fetchedPosts: BlogPost[] = [];
+        querySnapshot.forEach((doc) => {
+          fetchedPosts.push({ id: doc.id, ...doc.data() } as BlogPost);
+        });
+        setPosts(fetchedPosts);
+      } catch (error) {
+        console.error("Error fetching latest posts:", error);
+      }
+    };
+    fetchLatestPosts();
+  }, []);
+
+  const nextPost = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentPostIndex((prev) => (prev + 1) % posts.length);
+  };
+  
+  const prevPost = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentPostIndex((prev) => (prev - 1 + posts.length) % posts.length);
+  };
+
+  const currentPost = posts[currentPostIndex];
 
   return (
     <>
@@ -67,6 +112,37 @@ function NavPanelContent({ handleJoin, setCursorVariant, activeSection, isSoundE
         </div>
       </div>
       
+      {posts.length > 0 && (
+        <div className="border-b border-white/10 p-4 shrink-0 transition-opacity bg-black/20">
+          <div className="flex items-center justify-between mb-3 px-1">
+            <span className="text-[10px] font-bold text-nomad-green uppercase flex items-center gap-1.5 tracking-widest"><Newspaper className="w-3 h-3" /> LATEST</span>
+            <div className="flex items-center gap-1">
+              <button onClick={prevPost} className="p-1 hover:text-nomad-green text-white/40 transition-colors cursor-none" onMouseEnter={() => setCursorVariant('hover')} onMouseLeave={() => setCursorVariant('default')}><ChevronLeft className="w-4 h-4" /></button>
+              <button onClick={nextPost} className="p-1 hover:text-nomad-green text-white/40 transition-colors cursor-none" onMouseEnter={() => setCursorVariant('hover')} onMouseLeave={() => setCursorVariant('default')}><ChevronRight className="w-4 h-4" /></button>
+            </div>
+          </div>
+          <Link 
+            to={`/blog/${currentPost.id}`}
+            onClick={() => { if (setIsMenuOpen) setIsMenuOpen(false); }}
+            onMouseEnter={() => setCursorVariant('hover')}
+            onMouseLeave={() => setCursorVariant('default')}
+            className="block group overflow-hidden rounded relative border border-nomad-green/30 bg-white/5 cursor-none"
+          >
+            {currentPost.imageUrl ? (
+              <div className="aspect-[2] w-full overflow-hidden">
+                <img src={formatImageUrl(currentPost.imageUrl)} alt={currentPost.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-all duration-500 group-hover:scale-105 mix-blend-luminosity hover:mix-blend-normal" />
+              </div>
+            ) : (
+              <div className="aspect-[2] w-full bg-nomad-green/10"></div>
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 p-3">
+              <h4 className="text-[11px] font-black uppercase text-white tracking-widest group-hover:text-nomad-green transition-colors line-clamp-2 leading-snug">{currentPost.title}</h4>
+            </div>
+          </Link>
+        </div>
+      )}
+
       <div className="flex-1 p-6 md:p-8 flex flex-col justify-center gap-[14px] font-sans font-black text-sm uppercase tracking-wider text-white/50 relative bg-nomad-charcoal/40 backdrop-blur-sm overflow-y-auto" data-lenis-prevent>
         {sections.map(({ id, label }) => {
           const isActive = activeSection === id;
@@ -89,7 +165,7 @@ function NavPanelContent({ handleJoin, setCursorVariant, activeSection, isSoundE
             onClick={handleJoin}
             onMouseEnter={() => setCursorVariant('waitlist')}
             onMouseLeave={() => setCursorVariant('default')}
-            className="w-full bg-[#FFD700] text-nomad-charcoal px-6 py-4 font-black text-sm uppercase tracking-widest cursor-none hover:bg-white transition-colors flex items-center justify-between group shadow-[4px_4px_0px_rgba(0,0,0,0.5)]"
+            className="w-full bg-[#FFD700] text-[#000] px-6 py-4 font-black text-sm uppercase tracking-widest cursor-none hover:bg-white transition-colors flex items-center justify-between group shadow-[4px_4px_0px_rgba(0,0,0,0.5)]"
           >
             EARLY ACCESS
             <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,15 +173,24 @@ function NavPanelContent({ handleJoin, setCursorVariant, activeSection, isSoundE
             </svg>
           </button>
 
-          <button 
-            onClick={toggleSound}
-            onMouseEnter={() => setCursorVariant('hover')}
-            onMouseLeave={() => setCursorVariant('default')}
-            className="w-full border border-white/20 text-white/70 px-6 py-4 font-black text-sm uppercase tracking-widest cursor-none hover:bg-white/10 hover:text-white transition-colors flex items-center justify-between group"
-          >
-            AUDIO {isSoundEnabled ? 'ON' : 'OFF'}
-            {isSoundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-          </button>
+          <div className="flex gap-2">
+            <button 
+              onClick={toggleSound}
+              onMouseEnter={() => setCursorVariant('hover')}
+              onMouseLeave={() => setCursorVariant('default')}
+              className="flex-1 border border-white/20 text-white/70 px-4 py-4 font-black text-xs uppercase tracking-widest cursor-none hover:bg-white/10 hover:text-white transition-colors flex justify-center items-center gap-2 group"
+            >
+              {isSoundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            </button>
+            <button 
+              onClick={toggleTheme}
+              onMouseEnter={() => setCursorVariant('hover')}
+              onMouseLeave={() => setCursorVariant('default')}
+              className="flex-1 border border-nomad-green bg-nomad-green text-[#000] px-4 py-4 font-black text-xs uppercase tracking-widest cursor-none hover:bg-[#22C55E]/80 hover:text-[#000] transition-colors flex justify-center items-center gap-2 group"
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
       </div>
     </>
@@ -114,7 +199,7 @@ function NavPanelContent({ handleJoin, setCursorVariant, activeSection, isSoundE
 
 export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void }) {
   const containerRef = useRef<HTMLElement>(null);
-  const { setCursorVariant, isSoundEnabled, toggleSound, setIsSoundEnabled } = useAppContext();
+  const { setCursorVariant, isSoundEnabled, toggleSound, setIsSoundEnabled, theme, toggleTheme } = useAppContext();
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end start"]
@@ -250,7 +335,7 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
           onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }}
           onMouseEnter={(e) => { e.stopPropagation(); setCursorVariant('hover'); }}
           onMouseLeave={(e) => { e.stopPropagation(); setCursorVariant('default'); }}
-          className={`w-12 h-12 md:w-14 md:h-14 bg-nomad-green text-nomad-charcoal rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-all duration-300 cursor-none relative z-[100] pointer-events-auto`}
+          className={`w-12 h-12 md:w-14 md:h-14 bg-nomad-green text-[#000] rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-all duration-300 cursor-none relative z-[100] pointer-events-auto`}
         >
           <motion.div animate={{ rotate: isMenuOpen ? 90 : 0 }}>
              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -292,7 +377,7 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
           className="w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-[3000ms]"
         />
         {/* Gradient Overlay for text readability */}
-        <div className="absolute inset-0 bg-nomad-charcoal/40 mix-blend-multiply" />
+        <div className="absolute inset-0 bg-black/40" />
       </motion.div>
 
       {/* Main Grid Container */}
@@ -316,6 +401,9 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
                activeSection={activeSection}
                isSoundEnabled={isSoundEnabled}
                toggleSound={toggleSound}
+               setIsMenuOpen={setIsMenuOpen}
+               theme={theme}
+               toggleTheme={toggleTheme}
             />
           </div>
         </motion.div>
@@ -356,20 +444,9 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                className="relative z-10 w-full px-4 font-black font-display uppercase tracking-[-0.02em] text-[13.5vw] md:text-[12vw] lg:text-[140px] xl:text-[170px] leading-[0.75] flex justify-center mt-2 md:mt-4"
+                className="relative z-10 w-full px-4 font-black font-display uppercase tracking-[-0.02em] text-[13.5vw] md:text-[12vw] lg:text-[140px] xl:text-[170px] leading-[0.75] flex justify-center mt-2 md:mt-4 text-nomad-green drop-shadow-[0_0_35px_rgba(34,197,94,0.6)]"
               >
-                {/* SVG text wrapper to allow exact stroke-linejoin styling and fix the 'P' spike artifact */}
-                <span className="opacity-0">EPICS</span>
-                <svg className="absolute inset-0 w-full h-full overflow-visible pointer-events-none">
-                  <text 
-                    x="50%" y="50%" textAnchor="middle" dominantBaseline="central" dy="0.05em"
-                    fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="0.02em" strokeLinejoin="round" 
-                    className="font-display font-black uppercase tracking-[-0.02em]"
-                    style={{ fontSize: "1em" }}
-                  >
-                    EPICS
-                  </text>
-                </svg>
+                EPICS
               </motion.div>
               
               <motion.p
@@ -395,7 +472,7 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
                   <span className="text-white group-hover:text-[#111] text-xs sm:text-sm md:text-base font-black uppercase tracking-[0.1em] transition-colors duration-500 whitespace-nowrap overflow-hidden text-ellipsis">
                     Watch Announcement
                   </span>
-                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-nomad-green group-hover:bg-[#111] flex items-center justify-center text-[#111] group-hover:text-nomad-green transition-colors duration-500 shrink-0">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-nomad-green group-hover:bg-theme-100 flex items-center justify-center text-[#111] group-hover:text-nomad-green transition-colors duration-500 shrink-0">
                     <Play className="w-4 h-4 sm:w-5 sm:h-5 ml-1" fill="currentColor" />
                   </div>
                 </motion.button>
@@ -433,7 +510,7 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
           onClick={(e) => { e.stopPropagation(); setIsMenuOpen(!isMenuOpen); }}
           onMouseEnter={(e) => { e.stopPropagation(); setCursorVariant('hover'); }}
           onMouseLeave={(e) => { e.stopPropagation(); setCursorVariant('default'); }}
-          className={`w-12 h-12 md:w-14 md:h-14 bg-nomad-green text-nomad-charcoal rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-all duration-300 cursor-none relative z-[100] pointer-events-auto`}
+          className={`w-12 h-12 md:w-14 md:h-14 bg-nomad-green text-[#000] rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-all duration-300 cursor-none relative z-[100] pointer-events-auto`}
         >
           <motion.div animate={{ rotate: isMenuOpen ? 90 : 0 }}>
              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -479,6 +556,9 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
                activeSection={activeSection}
                isSoundEnabled={isSoundEnabled}
                toggleSound={toggleSound}
+               setIsMenuOpen={setIsMenuOpen}
+               theme={theme}
+               toggleTheme={toggleTheme}
              />
           </motion.div>
         )}
@@ -505,7 +585,7 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
                  initial={{ scale: 0.9, opacity: 0 }}
                  animate={{ scale: 1, opacity: 1 }}
                  exit={{ scale: 0.9, opacity: 0 }}
-                 className="w-full max-w-[1400px] aspect-video bg-[#111] overflow-hidden relative rounded-xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+                 className="w-full max-w-[1400px] aspect-video bg-theme-100 overflow-hidden relative rounded-xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
                  onClick={(e) => e.stopPropagation()}
               >
                   <video 
@@ -535,11 +615,11 @@ export default function Hero({ onJoinWaitlist }: { onJoinWaitlist: () => void })
            {[...Array(6)].map((_, i) => (
              <div key={i} className="flex items-center">
                <span className="mx-6">THE NOMAD DIFFERENCE</span>
-               <div className="w-3 h-3 bg-[#111] rotate-45" />
+               <div className="w-3 h-3 bg-theme-100 rotate-45" />
                <span className="mx-6">BEYOND THE NORM</span>
-               <div className="w-3 h-3 bg-[#111] rotate-45" />
+               <div className="w-3 h-3 bg-theme-100 rotate-45" />
                <span className="mx-6">BREAK THE MOLD</span>
-               <div className="w-3 h-3 bg-[#111] rotate-45" />
+               <div className="w-3 h-3 bg-theme-100 rotate-45" />
              </div>
            ))}
         </motion.div>

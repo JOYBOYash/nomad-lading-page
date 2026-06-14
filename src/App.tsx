@@ -18,6 +18,9 @@ import { AppProvider, useAppContext } from './context/AppContext';
 import CustomCursor from './components/CustomCursor';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
+import BlogPreview from './components/BlogPreview';
+import BlogPost from './pages/BlogPost';
+import AdminDashboard from './pages/AdminDashboard';
 
 import assets from './config/assets.json';
 
@@ -179,6 +182,7 @@ function Home({ scrollToWaitlist }: { scrollToWaitlist: () => void }) {
       <section id="features"><Features /></section>
       <section id="how-it-works"><HowItWorks /></section>
       <section id="wall-of-fame"><SocialProof /></section>
+      <section id="blog"><BlogPreview /></section>
       <section id="faq"><FAQ /></section>
       <section id="timeline"><Timeline /></section>
       <section id="waitlist"><FooterCTA /></section>
@@ -295,6 +299,8 @@ function MainApp() {
 
       <Routes>
         <Route path="/" element={<Home scrollToWaitlist={scrollToWaitlist} />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
+        <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfService />} />
       </Routes>

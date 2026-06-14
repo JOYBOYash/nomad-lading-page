@@ -5,7 +5,7 @@ import { useAppContext } from '../context/AppContext';
 import React, { useRef, useState, useEffect } from 'react';
 
 export default function Features() {
-  const { playHover, setCursorVariant } = useAppContext();
+  const { playHover, setCursorVariant, theme } = useAppContext();
   const containerRef = useRef<HTMLElement>(null);
   
   const { scrollYProgress } = useScroll({
@@ -72,7 +72,7 @@ export default function Features() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-100px" }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className="py-24 bg-nomad-charcoal text-nomad-ivory relative overflow-hidden"
+      className={`py-24 relative overflow-hidden bg-nomad-charcoal text-nomad-ivory`}
     >
       {/* Background glow */}
       <motion.div 
@@ -94,7 +94,7 @@ export default function Features() {
           variants={{ hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.6 } } }}
           className="text-center mb-16 flex flex-col items-center"
         >
-           <h2 className="text-[36px] sm:text-[44px] md:text-[60px] lg:text-[70px] leading-none font-black font-display uppercase tracking-[-0.03em] text-white">
+           <h2 className={`text-[36px] sm:text-[44px] md:text-[60px] lg:text-[70px] leading-none font-black font-display uppercase tracking-[-0.03em] text-white`}>
              Why Nomad Wins
            </h2>
         </motion.div>
@@ -115,7 +115,7 @@ export default function Features() {
                 <TiltCard className="w-full h-full group">
                   {/* Outer Ticket Container */}
                   <div 
-                    className={`relative flex w-full h-full bg-[#2a2a2a] rounded-xl overflow-hidden shadow-2xl transition-all duration-500 group-hover:-translate-y-1 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-px before:border-l-[3px] before:border-dotted before:border-[#1a1a1a]/80 before:z-10 after:absolute after:right-[58px] after:top-2 after:bottom-2 after:w-px after:border-r-[3px] after:border-dotted after:border-[#1a1a1a]/80 after:z-10 ${isActive ? '-translate-y-1' : ''}`}
+                    className={`relative flex w-full h-full bg-theme-500 rounded-xl overflow-hidden shadow-2xl transition-all duration-500 group-hover:-translate-y-1 before:absolute before:left-2 before:top-2 before:bottom-2 before:w-px before:border-l-[3px] before:border-dotted before:border-theme-ticket/80 before:z-10 after:absolute after:right-[58px] after:top-2 after:bottom-2 after:w-px after:border-r-[3px] after:border-dotted after:border-theme-ticket/80 after:z-10 ${isActive ? '-translate-y-1' : ''}`}
                     onPointerEnter={(e) => {
                       if (e.pointerType === 'mouse') {
                         playHover();
@@ -133,10 +133,10 @@ export default function Features() {
                   >
                      
                      {/* Left Cutout */}
-                     <div className="absolute top-1/2 -left-4 w-8 h-8 bg-nomad-charcoal rounded-full -translate-y-1/2 z-20 transition-colors duration-500" />
+                     <div className={`absolute top-1/2 -left-4 w-8 h-8 rounded-full -translate-y-1/2 z-20 transition-colors duration-500 bg-nomad-charcoal`} />
                      
                      {/* Right Cutout */}
-                     <div className="absolute top-1/2 -right-4 w-8 h-8 bg-nomad-charcoal rounded-full -translate-y-1/2 z-20 transition-colors duration-500" />
+                     <div className={`absolute top-1/2 -right-4 w-8 h-8 rounded-full -translate-y-1/2 z-20 transition-colors duration-500 bg-nomad-charcoal`} />
 
                      {/* Content Area */}
                    <div className="flex-1 p-6 md:p-8 flex flex-col justify-between relative z-10 w-full overflow-hidden">
@@ -150,7 +150,7 @@ export default function Features() {
                       </div>
                       
                       <div className="mt-auto flex items-center justify-between w-full relative z-20">
-                          <div className={`w-[30px] h-[30px] rounded-[10px] border-[1.5px] flex items-center justify-center font-bold text-xs pt-[1px] transition-colors duration-500 ${isActive ? 'border-nomad-green bg-nomad-green text-[#111] opacity-100' : 'border-[#404040] text-[#a1a1aa] opacity-80 group-hover:text-nomad-green group-hover:border-nomad-green'}`}>
+                          <div className={`w-[30px] h-[30px] rounded-[10px] border-[1.5px] flex items-center justify-center font-bold text-xs pt-[1px] transition-colors duration-500 ${isActive ? 'border-nomad-green bg-nomad-green text-[#000] opacity-100' : 'border-white/20 text-white/60 opacity-80 group-hover:text-nomad-green group-hover:border-nomad-green'}`}>
                              {idx + 1}
                           </div>
                       </div>
@@ -162,7 +162,7 @@ export default function Features() {
                    </div>
 
                    {/* Barcode Area */}
-                   <div className="w-[60px] shrink-0 transition-colors flex items-center justify-end p-3 relative bg-[#262626] overflow-hidden">
+                   <div className="w-[60px] shrink-0 transition-colors flex items-center justify-end p-3 relative bg-theme-400 overflow-hidden">
                        {/* Scanner Line Animation */}
                        {isActive && (
                          <motion.div
