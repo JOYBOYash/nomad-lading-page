@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore, initializeFirestore, Firestore, doc, getDocFromServer } from "firebase/firestore";
+import { getFirestore, initializeFirestore, Firestore, doc, getDocFromServer, setLogLevel } from "firebase/firestore";
 import { getAuth, Auth } from "firebase/auth";
 
 const firebaseConfig = {
@@ -19,6 +19,13 @@ let auth: Auth | null = null;
 if (firebaseConfig.apiKey) {
   app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
   
+  // Set Firestore log level to "silent" to suppress connection timeout warnings in environments with restricted external networks
+  try {
+    setLogLevel("silent");
+  } catch (error) {
+    console.warn("Could not set Firestore log level:", error);
+  }
+
   try {
     db = initializeFirestore(app, {
       experimentalForceLongPolling: true,
@@ -32,17 +39,5 @@ if (firebaseConfig.apiKey) {
   auth = getAuth(app);
 }
 
-// Test Firestore connection on boot to detect and report offline status instantly
-async function testConnection() {
-  if (!db) return;
-  try {
-    await getDocFromServer(doc(db, 'test', 'connection'));
-  } catch (error) {
-    if (error instanceof Error && error.message.includes('the client is offline')) {
-      console.warn("Please check your Firebase configuration or network routing.");
-    }
-  }
-}
-testConnection();
-
 export { app, db, auth };
+

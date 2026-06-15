@@ -22,6 +22,7 @@ import { db } from "../lib/firebase";
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import { BlogPost } from "../types/blog";
 import { formatImageUrl } from "../lib/utils";
+import { FALLBACK_BLOGS } from "../lib/fallbackBlogs";
 import { useAppContext } from "../context/AppContext";
 import assets from "../config/assets.json";
 import { useCountdown } from "./Countdown";
@@ -124,7 +125,10 @@ export function NavPanelContent({
   useEffect(() => {
     const fetchLatestPosts = async () => {
       try {
-        if (!db) return;
+        if (!db) {
+          setPosts(FALLBACK_BLOGS);
+          return;
+        }
         const q = query(
           collection(db, "blogs"),
           orderBy("createdAt", "desc"),
@@ -135,9 +139,15 @@ export function NavPanelContent({
         querySnapshot.forEach((doc) => {
           fetchedPosts.push({ id: doc.id, ...doc.data() } as BlogPost);
         });
-        setPosts(fetchedPosts);
+        
+        if (fetchedPosts.length > 0) {
+          setPosts(fetchedPosts);
+        } else {
+          setPosts(FALLBACK_BLOGS);
+        }
       } catch (error) {
-        console.error("Error fetching latest posts:", error);
+        console.error("Error fetching latest posts for ticker, using local cache:", error);
+        setPosts(FALLBACK_BLOGS);
       }
     };
     fetchLatestPosts();
@@ -326,30 +336,67 @@ export default function Hero({
     typeof window !== "undefined" ? window.innerWidth >= 1024 : true,
   );
   const [showVideo, setShowVideo] = useState(false);
+  const [isVideoLoading, setIsVideoLoading] = useState(true);
+  const [videoLoadProgress, setVideoLoadProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("home");
 
   const bgVideoRef = useRef<HTMLVideoElement>(null);
   const modalVideoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    if (showVideo) {
+      setIsVideoLoading(true);
+      setVideoLoadProgress(5);
+    }
+  }, [showVideo]);
+
+  const handleVideoLoadStart = () => {
+    setIsVideoLoading(true);
+    setVideoLoadProgress((prev) => Math.max(prev, 10));
+  };
+
+  const handleVideoProgress = () => {
+    if (modalVideoRef.current && modalVideoRef.current.buffered.length > 0) {
+      const duration = modalVideoRef.current.duration || 100;
+      const bufferedEnd = modalVideoRef.current.buffered.end(modalVideoRef.current.buffered.length - 1);
+      const percent = Math.min(100, Math.floor((bufferedEnd / duration) * 100));
+      setVideoLoadProgress((prev) => Math.max(prev, percent));
+    } else {
+      setVideoLoadProgress((prev) => (prev < 90 ? prev + 8 : prev));
+    }
+  };
+
+  const handleVideoCanPlay = () => {
+    setVideoLoadProgress(100);
+    setTimeout(() => {
+      setIsVideoLoading(false);
+      // Force play standard announcement video once buffered/ready because it resides in an overlay
+      if (modalVideoRef.current) {
+        modalVideoRef.current.muted = !isSoundEnabled;
+        const playPromise = modalVideoRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((e) => {
+            console.log("Modal play on canplay was blocked unmuted, trying muted:", e);
+            if (modalVideoRef.current) {
+              modalVideoRef.current.muted = true;
+              modalVideoRef.current.play().catch((err) => console.log("Muted modal play failed too:", err));
+            }
+          });
+        }
+      }
+    }, 300);
+  };
+
+  useEffect(() => {
     if (bgVideoRef.current) {
       if (showVideo) {
         bgVideoRef.current.pause();
       } else {
-        bgVideoRef.current.muted = !isSoundEnabled;
+        bgVideoRef.current.muted = true; // Statically mute background video to allow instant reliable browser autoplay
         const playPromise = bgVideoRef.current.play();
         if (playPromise !== undefined) {
           playPromise.catch((e) => {
-            console.log(
-              "Bg video play error unmuted, falling back to muted:",
-              e,
-            );
-            if (bgVideoRef.current) {
-              bgVideoRef.current.muted = true;
-              bgVideoRef.current
-                .play()
-                .catch((err) => console.log("Bg video play error muted:", err));
-            }
+            console.log("Bg video play muted error:", e);
           });
         }
       }
@@ -360,7 +407,7 @@ export default function Hero({
         const modalPlay = modalVideoRef.current.play();
         if (modalPlay !== undefined) {
           modalPlay.catch((e) => {
-            console.log("Modal video play error:", e);
+            console.log("Modal video play error, trying muted:", e);
             if (modalVideoRef.current) {
               modalVideoRef.current.muted = true;
               modalVideoRef.current
@@ -373,28 +420,6 @@ export default function Hero({
         modalVideoRef.current.pause();
       }
     }
-  }, [isSoundEnabled, showVideo]);
-
-  useEffect(() => {
-    const handleFirstInteraction = () => {
-      if (bgVideoRef.current && isSoundEnabled && !showVideo) {
-        bgVideoRef.current.muted = false;
-        bgVideoRef.current.play().catch(() => {
-          // If it still fails, that's fine, we tried.
-        });
-      }
-    };
-
-    const events = ["click", "keydown"];
-    events.forEach((event) =>
-      document.addEventListener(event, handleFirstInteraction, { once: true }),
-    );
-
-    return () => {
-      events.forEach((event) =>
-        document.removeEventListener(event, handleFirstInteraction),
-      );
-    };
   }, [isSoundEnabled, showVideo]);
 
   useEffect(() => {
@@ -541,7 +566,7 @@ export default function Hero({
           src={assets.videos.heroBackground}
           autoPlay
           loop
-          muted={!isSoundEnabled}
+          muted
           playsInline
           className="w-full h-full object-cover opacity-50 grayscale hover:grayscale-0 transition-all duration-[3000ms]"
         />
@@ -813,6 +838,32 @@ export default function Hero({
                   className="w-full max-w-[1400px] aspect-video bg-theme-100 overflow-hidden relative rounded-xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
                   onClick={(e) => e.stopPropagation()}
                 >
+                  <AnimatePresence>
+                    {isVideoLoading && (
+                      <motion.div
+                        initial={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/90 backdrop-blur-md"
+                      >
+                        <div className="w-80 max-w-full px-6 text-center select-none">
+                          <h3 className="text-nomad-green font-sans font-black uppercase tracking-widest text-sm mb-4 animate-pulse">
+                            NOMAD ANNOUNCEMENT LOADING...
+                          </h3>
+                          <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden border border-white/5 p-[1px]">
+                            <motion.div
+                              className="h-full bg-gradient-to-r from-nomad-green to-emerald-400 rounded-full shadow-[0_0_12px_rgba(34,197,94,0.6)]"
+                              initial={{ width: "0%" }}
+                              animate={{ width: `${videoLoadProgress}%` }}
+                              transition={{ duration: 0.15, ease: "easeOut" }}
+                            />
+                          </div>
+                          <span className="font-mono text-[10px] text-white/50 mt-3 block tracking-widest">
+                            {videoLoadProgress}% BUFFERED
+                          </span>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                   <video
                     ref={modalVideoRef}
                     src={assets.videos.demoVideo}
@@ -821,6 +872,9 @@ export default function Hero({
                     muted={!isSoundEnabled}
                     playsInline
                     className="w-full h-full object-cover"
+                    onLoadStart={handleVideoLoadStart}
+                    onProgress={handleVideoProgress}
+                    onCanPlay={handleVideoCanPlay}
                   />
                 </motion.div>
               </motion.div>

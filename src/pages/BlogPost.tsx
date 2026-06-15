@@ -7,6 +7,7 @@ import { doc, getDoc, collection, query, orderBy, limit, getDocs } from 'firebas
 import { BlogPost as BlogPostType } from '../types/blog';
 import { useAppContext } from '../context/AppContext';
 import { formatImageUrl } from '../lib/utils';
+import { FALLBACK_BLOGS } from '../lib/fallbackBlogs';
 import GlobalNav from '../components/GlobalNav';
 
 export default function BlogPost() {
@@ -22,7 +23,15 @@ export default function BlogPost() {
     // Always start at top when viewing a new blog
     window.scrollTo(0, 0);
 
+    const fallbackPost = FALLBACK_BLOGS.find(p => p.id === id);
+
     const fetchPost = async () => {
+      if (fallbackPost) {
+        setPost(fallbackPost);
+        setLoading(false);
+        return;
+      }
+
       try {
         if (!db) {
           setLoading(false);
@@ -44,7 +53,10 @@ export default function BlogPost() {
     
     const fetchRecommended = async () => {
        try {
-         if (!db) return;
+         if (!db) {
+           setRecommendedPosts(FALLBACK_BLOGS.filter(p => p.id !== id).slice(0, 3));
+           return;
+         }
          const q = query(
            collection(db, 'blogs'),
            orderBy('createdAt', 'desc'),
@@ -55,9 +67,15 @@ export default function BlogPost() {
             .map(d => ({ id: d.id, ...d.data() } as BlogPostType))
             .filter(p => p.id !== id)
             .slice(0, 3);
-         setRecommendedPosts(posts);
+         
+         if (posts.length > 0) {
+           setRecommendedPosts(posts);
+         } else {
+           setRecommendedPosts(FALLBACK_BLOGS.filter(p => p.id !== id).slice(0, 3));
+         }
        } catch (err) {
-         console.error("Error fetching recommended:", err);
+         console.error("Error fetching recommended, using local fallback cache:", err);
+         setRecommendedPosts(FALLBACK_BLOGS.filter(p => p.id !== id).slice(0, 3));
        }
     };
 

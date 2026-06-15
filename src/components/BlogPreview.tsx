@@ -7,6 +7,7 @@ import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import { BlogPost } from "../types/blog";
 import { useAppContext } from "../context/AppContext";
 import { formatImageUrl } from "../lib/utils";
+import { FALLBACK_BLOGS } from "../lib/fallbackBlogs";
 
 export default function BlogPreview() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -17,6 +18,7 @@ export default function BlogPreview() {
     const fetchLatestPosts = async () => {
       try {
         if (!db) {
+          setPosts(FALLBACK_BLOGS);
           setLoading(false);
           return;
         }
@@ -30,9 +32,15 @@ export default function BlogPreview() {
         querySnapshot.forEach((doc) => {
           fetchedPosts.push({ id: doc.id, ...doc.data() } as BlogPost);
         });
-        setPosts(fetchedPosts);
+        
+        if (fetchedPosts.length > 0) {
+          setPosts(fetchedPosts);
+        } else {
+          setPosts(FALLBACK_BLOGS);
+        }
       } catch (error) {
-        console.error("Error fetching latest posts:", error);
+        console.error("Error fetching latest posts, using high-quality local cache:", error);
+        setPosts(FALLBACK_BLOGS);
       } finally {
         setLoading(false);
       }
@@ -51,7 +59,8 @@ export default function BlogPreview() {
     );
   }
 
-  if (posts.length === 0) return null; // Only render section if there are posts
+  // Always render section now that we have robust fallback content
+  const displayPosts = posts.length > 0 ? posts : FALLBACK_BLOGS;
 
   return (
     <section
@@ -85,7 +94,7 @@ export default function BlogPreview() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {posts.map((post, i) => (
+          {displayPosts.map((post, i) => (
             <motion.article
               key={post.id}
               initial={{ opacity: 0, y: 30 }}
