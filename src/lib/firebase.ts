@@ -1,5 +1,5 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore, initializeFirestore, Firestore } from "firebase/firestore";
+import { getFirestore, initializeFirestore, Firestore, doc, getDocFromServer } from "firebase/firestore";
 import { getAuth, Auth } from "firebase/auth";
 
 const firebaseConfig = {
@@ -21,7 +21,8 @@ if (firebaseConfig.apiKey) {
   
   try {
     db = initializeFirestore(app, {
-      experimentalForceLongPolling: true
+      experimentalForceLongPolling: true,
+      experimentalAutoDetectLongPolling: true
     });
   } catch (e) {
     // If it's already initialized (e.g. during HMR), use getFirestore
@@ -30,5 +31,18 @@ if (firebaseConfig.apiKey) {
   
   auth = getAuth(app);
 }
+
+// Test Firestore connection on boot to detect and report offline status instantly
+async function testConnection() {
+  if (!db) return;
+  try {
+    await getDocFromServer(doc(db, 'test', 'connection'));
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('the client is offline')) {
+      console.warn("Please check your Firebase configuration or network routing.");
+    }
+  }
+}
+testConnection();
 
 export { app, db, auth };

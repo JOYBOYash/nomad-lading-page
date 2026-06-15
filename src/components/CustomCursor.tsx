@@ -59,7 +59,7 @@ export default function CustomCursor() {
       y: "-50%",
       width: 24,
       height: 24,
-      backgroundColor: "transparent",
+      backgroundColor: "rgba(34, 197, 94, 0)",
       filter: "drop-shadow(0px 4px 6px rgba(0,0,0,0.3))",
       borderRadius: "0%",
       rotate: 135,

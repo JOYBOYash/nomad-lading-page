@@ -64,5 +64,3 @@ content = content.replace(
     'const strokeColor = theme === \\\'light\\\' ? "#22C55E" : "#1a1a1a";'
 );
 fs.writeFileSync(file, content);
-
-console.log("Features/WorldMap reverted successfully.");

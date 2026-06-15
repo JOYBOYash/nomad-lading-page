@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, useScroll, AnimatePresence } from 'motion/react';
-import Lenis from 'lenis';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import Hero from './components/Hero';
@@ -174,18 +173,47 @@ function LoadingScreen({ onComplete }: { onComplete: () => void }) {
 }
 
 function Home({ scrollToWaitlist }: { scrollToWaitlist: () => void }) {
+  useEffect(() => {
+    // Enable buttery CSS scroll snapping on mount for the landing page
+    document.documentElement.classList.add('snap-container');
+    return () => {
+      // Clean up when leaving landing page (e.g. going to blog reading or admin)
+      document.documentElement.classList.remove('snap-container');
+    };
+  }, []);
+
+  const sections = [
+    { id: 'home', component: <Hero onJoinWaitlist={scrollToWaitlist} /> },
+    { id: 'problem', component: <Problem /> },
+    { id: 'difference', component: <Difference /> },
+    { id: 'features', component: <Features /> },
+    { id: 'how-it-works', component: <HowItWorks /> },
+    { id: 'wall-of-fame', component: <SocialProof /> },
+    { id: 'blog', component: <BlogPreview /> },
+    { id: 'faq', component: <FAQ /> },
+    { id: 'timeline', component: <Timeline /> },
+    { id: 'waitlist', component: <FooterCTA /> }
+  ];
+
   return (
     <main>
-      <section id="home"><Hero onJoinWaitlist={scrollToWaitlist} /></section>
-      <section id="problem"><Problem /></section>
-      <section id="difference"><Difference /></section>
-      <section id="features"><Features /></section>
-      <section id="how-it-works"><HowItWorks /></section>
-      <section id="wall-of-fame"><SocialProof /></section>
-      <section id="blog"><BlogPreview /></section>
-      <section id="faq"><FAQ /></section>
-      <section id="timeline"><Timeline /></section>
-      <section id="waitlist"><FooterCTA /></section>
+      {sections.map((sec) => (
+        <section 
+          key={sec.id} 
+          id={sec.id} 
+          className="snap-section relative w-full"
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full"
+          >
+            {sec.component}
+          </motion.div>
+        </section>
+      ))}
     </main>
   );
 }
@@ -215,44 +243,12 @@ function MainApp() {
   }, [location.pathname]);
 
   useEffect(() => {
-    // Initialize Lenis exactly once
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 2,
-    });
-    
-    // @ts-ignore
-    window.lenis = lenis;
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-      // @ts-ignore
-      delete window.lenis;
-    };
-  }, []);
-
-  useEffect(() => {
     if (isLoading || isModalOpen) {
       document.body.style.overflow = 'hidden';
       document.documentElement.style.overflow = 'hidden';
-      // @ts-ignore
-      if (window.lenis) window.lenis.stop();
     } else {
       document.body.style.overflow = '';
       document.documentElement.style.overflow = '';
-      // @ts-ignore
-      if (window.lenis) window.lenis.start();
     }
     
     const handleMouseLeave = (e: MouseEvent) => {

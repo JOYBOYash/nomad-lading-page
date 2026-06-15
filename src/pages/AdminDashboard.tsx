@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 import { db, auth } from '../lib/firebase';
 import { collection, query, orderBy, getDocs, deleteDoc, doc, getDoc } from 'firebase/firestore';
-import { BlogPostType } from '../types/blog';
+import { BlogPost as BlogPostType } from '../types/blog';
 import { Lock, FileText, Trash2, Plus, LogOut, Link as LinkIcon, Save, Image as ImageIcon, User } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import { formatImageUrl } from '../lib/utils';
@@ -154,8 +154,8 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-nomad-charcoal pt-32 pb-24 px-6 md:px-12">
       <div className="max-w-5xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between md:items-end mb-12 gap-6">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-display font-black tracking-tighter uppercase mb-2 text-nomad-ivory">Admin Dashboard</h1>
+          <div className="min-w-0">
+            <h1 className="text-4xl md:text-5xl font-display font-black tracking-tighter uppercase mb-2 text-nomad-ivory break-words">Admin Dashboard</h1>
             <p className="text-white/50 text-sm">Securely manage your platform content.</p>
           </div>
           <button 
@@ -192,19 +192,19 @@ export default function AdminDashboard() {
               </div>
             ) : (
               blogs.map((blog) => (
-                <div key={blog.id} className="flex flex-col md:flex-row items-center justify-between p-4 border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors gap-4">
-                  <div className="flex items-center gap-4 w-full md:w-auto">
+                <div key={blog.id} className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 border border-white/10 bg-white/[0.02] hover:bg-white/[0.04] transition-colors gap-4">
+                  <div className="flex items-center gap-4 w-full md:w-auto min-w-0">
                     {blog.imageUrl && (
-                       <img src={formatImageUrl(blog.imageUrl)} alt={blog.title} className="w-16 h-16 object-cover bg-black/50" />
+                       <img src={formatImageUrl(blog.imageUrl)} alt={blog.title} className="w-16 h-16 object-cover bg-black/50 shrink-0" />
                     )}
-                    <div className="flex flex-col">
-                      <h3 className="font-bold text-nomad-ivory line-clamp-1">{blog.title}</h3>
-                      <span className="text-xs text-white/50">
+                    <div className="flex flex-col min-w-0">
+                      <h3 className="font-bold text-nomad-ivory line-clamp-2 md:line-clamp-1 break-words">{blog.title}</h3>
+                      <span className="text-xs text-white/50 whitespace-nowrap overflow-hidden text-ellipsis">
                         {blog.createdAt?.toDate ? blog.createdAt.toDate().toLocaleDateString() : 'Just now'} • {blog.authorName || 'Admin'}
                       </span>
                     </div>
                   </div>
-                  <div className="w-full md:w-auto flex justify-end">
+                  <div className="w-full md:w-auto flex justify-end shrink-0">
                     <button
                       onClick={(e) => handleDelete(blog.id!, e)}
                       className="p-3 text-red-500/70 hover:text-red-500 hover:bg-red-500/10 transition-colors"

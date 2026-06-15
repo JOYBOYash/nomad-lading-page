@@ -83,10 +83,10 @@ export default function HowItWorks() {
                     <div className={`absolute inset-0 transition-colors duration-500 ${isActive ? 'bg-nomad-green/5' : 'bg-nomad-green/0'}`} />
                     
                     <div className="flex-1 relative z-10">
-                      <h3 className={`text-2xl md:text-3xl font-sans font-black uppercase tracking-widest transition-colors duration-500 mb-2 ${isActive ? 'text-nomad-green' : (theme === 'light' ? 'text-[#000000]/80' : 'text-white')}`}>
+                      <h3 className={`text-2xl md:text-3xl font-sans font-black uppercase tracking-widest transition-colors duration-500 mb-2 ${isActive ? 'text-nomad-green' : (theme === 'light' ? 'text-[#222222]' : 'text-white')}`}>
                          {step.title}
                       </h3>
-                      <div className={`flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest transition-colors duration-500 ${isActive ? (theme === 'light' ? 'text-[#ffffff]' : 'text-[#ffffff]/80') : (theme === 'light' ? 'text-[#000000]/80' : 'text-white/50')}`}>
+                      <div className={`flex items-center gap-2 text-xs md:text-sm font-bold uppercase tracking-widest transition-colors duration-500 ${isActive ? (theme === 'light' ? 'text-black' : 'text-[#ffffff]/80') : (theme === 'light' ? 'text-[#333333]' : 'text-white/50')}`}>
                          <span className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-500 ${isActive ? 'bg-nomad-green animate-pulse' : (theme === 'light' ? 'bg-[#111111]/40' : 'bg-white/30')}`} /> {step.desc}
                       </div>
                     </div>

@@ -74,10 +74,10 @@ export default function Timeline() {
 
         <div className="relative mt-24 pb-12 w-full max-w-6xl mx-auto">
           {/* Main timeline track */}
-          <div className={`hidden lg:block absolute top-[28px] left-[12.5%] right-[12.5%] h-[2px] z-0 ${theme === 'light' ? 'bg-white/60' : 'bg-white/10'}`}>
+          <div className={`hidden lg:block absolute top-[28px] left-[12.5%] right-[12.5%] h-[2px] z-0 ${theme === 'light' ? 'bg-white/40' : 'bg-white/10'}`}>
             {/* Progress fill */}
             <motion.div 
-              className={`absolute top-0 left-0 bottom-0 z-0 ${theme === 'light' ? 'bg-black' : 'bg-nomad-green'}`}
+              className={`absolute top-0 left-0 bottom-0 z-0 ${theme === 'light' ? 'bg-white' : 'bg-nomad-green'}`}
               initial={{ width: 0 }}
               animate={{ width: `${progress}%` }}
               transition={{ duration: 1, ease: 'easeOut' }}
@@ -99,11 +99,11 @@ export default function Timeline() {
                 className="flex flex-row lg:flex-col items-start lg:items-center relative w-full lg:w-1/4"
               >
                 <div className="hidden lg:block absolute top-0 w-full h-[60px] cursor-default">
-                   <div className={`absolute left-1/2 top-[28px] w-4 h-4 rounded-full -translate-x-1/2 -translate-y-1/2 z-10 transition-transform duration-300 hover:scale-150 ${isPassed ? (theme === 'light' ? 'bg-black shadow-[0_0_15px_rgba(0,0,0,0.3)]' : 'bg-nomad-green shadow-[0_0_15px_rgba(0,255,102,0.5)]') : (theme === 'light' ? 'bg-transparent border-2 border-white/60' : 'bg-theme-600 border-2 border-white/20')}`}></div>
+                   <div className={`absolute left-1/2 top-[28px] w-4 h-4 rounded-full -translate-x-1/2 -translate-y-1/2 z-10 transition-transform duration-300 hover:scale-150 ${isPassed ? (theme === 'light' ? 'bg-black border-2 border-white animate-pulse shadow-[0_0_15px_rgba(0,0,0,0.5)]' : 'bg-nomad-green shadow-[0_0_15px_rgba(0,255,102,0.5)]') : (theme === 'light' ? 'bg-white border-2 border-white' : 'bg-theme-600 border-2 border-white/20')}`}></div>
                 </div>
 
-                <div className={`lg:hidden w-[2px] absolute top-0 bottom-0 left-[7px] z-0 ${theme === 'light' ? 'bg-white/60' : 'bg-white/10'}`}></div>
-                <div className={`lg:hidden absolute left-[7px] top-6 w-4 h-4 rounded-full -translate-x-1/2 z-10 ${isPassed ? (theme === 'light' ? 'bg-black shadow-[0_0_15px_rgba(0,0,0,0.3)]' : 'bg-nomad-green shadow-[0_0_15px_rgba(0,255,102,0.5)]') : (theme === 'light' ? 'bg-transparent border-2 border-white/60' : 'bg-theme-600 border-2 border-white/20')}`}></div>
+                <div className={`lg:hidden w-[2px] absolute top-0 bottom-0 left-[7px] z-0 ${theme === 'light' ? 'bg-white/40' : 'bg-white/10'}`}></div>
+                <div className={`lg:hidden absolute left-[7px] top-6 w-4 h-4 rounded-full -translate-x-1/2 z-10 ${isPassed ? (theme === 'light' ? 'bg-black border-2 border-white animate-pulse shadow-[0_0_15px_rgba(0,0,0,0.5)]' : 'bg-nomad-green shadow-[0_0_15px_rgba(0,255,102,0.5)]') : (theme === 'light' ? 'bg-white border-2 border-white' : 'bg-theme-600 border-2 border-white/20')}`}></div>
 
                 <div className="pl-8 lg:pl-0 pt-0 lg:pt-16 lg:text-center flex flex-col items-start lg:items-center relative w-full">
                   <div className={`font-mono text-sm tracking-widest uppercase mb-2 ${isPassed ? (theme === 'light' ? 'text-black' : 'text-nomad-green') : (theme === 'light' ? 'text-black/60' : 'text-white/40')}`}>

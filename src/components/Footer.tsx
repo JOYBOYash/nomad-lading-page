@@ -7,7 +7,7 @@ export default function Footer() {
   const isHome = location.pathname === '/';
 
   return (
-    <footer className={`text-nomad-ivory py-16 relative z-10 pb-32 sm:pb-16 ${isHome ? 'bg-gradient-to-b from-nomad-green/20 to-nomad-charcoal/20' : 'bg-theme-100 border-t border-white/5'}`}>
+    <footer className={`text-nomad-ivory py-16 relative z-10 pb-32 sm:pb-16 ${isHome ? 'bg-gradient-to-b from-nomad-green/20 to-nomad-charcoal/20 snap-section-end' : 'bg-theme-100 border-t border-white/5'}`}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col items-center justify-center gap-8 mb-12">
           <div className="flex items-center justify-center gap-2 text-nomad-green hover:opacity-80 transition-opacity cursor-pointer">

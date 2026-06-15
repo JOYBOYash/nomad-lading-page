@@ -34,14 +34,10 @@ const faqs = [
 ];
 
 export default function FAQ() {
-  const [openIndices, setOpenIndices] = useState<number[]>([0]);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   const toggleOpen = (index: number) => {
-    setOpenIndices((current) => 
-      current.includes(index) 
-        ? current.filter((i) => i !== index)
-        : [...current, index]
-    );
+    setOpenIndex((current) => (current === index ? null : index));
   };
 
   return (
@@ -68,7 +64,7 @@ export default function FAQ() {
         {/* FAQ List */}
         <div className="flex flex-col border-t border-white/10 relative">
           {faqs.map((faq, index) => {
-            const isOpen = openIndices.includes(index);
+            const isOpen = openIndex === index;
             
             return (
             <div 
