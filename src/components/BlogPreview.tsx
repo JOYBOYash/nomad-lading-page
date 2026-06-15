@@ -18,7 +18,7 @@ export default function BlogPreview() {
     const fetchLatestPosts = async () => {
       try {
         if (!db) {
-          setPosts(FALLBACK_BLOGS);
+          setPosts([]);
           setLoading(false);
           return;
         }
@@ -33,14 +33,10 @@ export default function BlogPreview() {
           fetchedPosts.push({ id: doc.id, ...doc.data() } as BlogPost);
         });
         
-        if (fetchedPosts.length > 0) {
-          setPosts(fetchedPosts);
-        } else {
-          setPosts(FALLBACK_BLOGS);
-        }
+        setPosts(fetchedPosts);
       } catch (error) {
-        console.error("Error fetching latest posts, using high-quality local cache:", error);
-        setPosts(FALLBACK_BLOGS);
+        console.error("Error fetching latest posts:", error);
+        setPosts([]);
       } finally {
         setLoading(false);
       }
@@ -52,15 +48,16 @@ export default function BlogPreview() {
   if (loading) {
     return (
       <section
-        className={`py-24 flex justify-center items-center ${theme === "light" ? "bg-white text-black" : "bg-nomad-charcoal text-white"}`}
+        className={`py-24 flex justify-center items-center ${theme === "light" ? "bg-[#FAFAFA] text-black border-b border-black/5" : "bg-nomad-charcoal text-white border-b border-white/5"}`}
       >
         <div className="w-8 h-8 border-2 border-nomad-green/20 border-t-nomad-green rounded-full animate-spin" />
       </section>
     );
   }
 
-  // Always render section now that we have robust fallback content
-  const displayPosts = posts.length > 0 ? posts : FALLBACK_BLOGS;
+  if (posts.length === 0) {
+    return null;
+  }
 
   return (
     <section
@@ -94,7 +91,7 @@ export default function BlogPreview() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayPosts.map((post, i) => (
+          {posts.map((post, i) => (
             <motion.article
               key={post.id}
               initial={{ opacity: 0, y: 30 }}

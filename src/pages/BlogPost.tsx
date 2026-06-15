@@ -7,7 +7,6 @@ import { doc, getDoc, collection, query, orderBy, limit, getDocs } from 'firebas
 import { BlogPost as BlogPostType } from '../types/blog';
 import { useAppContext } from '../context/AppContext';
 import { formatImageUrl } from '../lib/utils';
-import { FALLBACK_BLOGS } from '../lib/fallbackBlogs';
 import GlobalNav from '../components/GlobalNav';
 
 export default function BlogPost() {
@@ -23,15 +22,7 @@ export default function BlogPost() {
     // Always start at top when viewing a new blog
     window.scrollTo(0, 0);
 
-    const fallbackPost = FALLBACK_BLOGS.find(p => p.id === id);
-
     const fetchPost = async () => {
-      if (fallbackPost) {
-        setPost(fallbackPost);
-        setLoading(false);
-        return;
-      }
-
       try {
         if (!db) {
           setLoading(false);
@@ -53,10 +44,7 @@ export default function BlogPost() {
     
     const fetchRecommended = async () => {
        try {
-         if (!db) {
-           setRecommendedPosts(FALLBACK_BLOGS.filter(p => p.id !== id).slice(0, 3));
-           return;
-         }
+         if (!db) return;
          const q = query(
            collection(db, 'blogs'),
            orderBy('createdAt', 'desc'),
@@ -68,14 +56,10 @@ export default function BlogPost() {
             .filter(p => p.id !== id)
             .slice(0, 3);
          
-         if (posts.length > 0) {
-           setRecommendedPosts(posts);
-         } else {
-           setRecommendedPosts(FALLBACK_BLOGS.filter(p => p.id !== id).slice(0, 3));
-         }
+         setRecommendedPosts(posts);
        } catch (err) {
-         console.error("Error fetching recommended, using local fallback cache:", err);
-         setRecommendedPosts(FALLBACK_BLOGS.filter(p => p.id !== id).slice(0, 3));
+         console.error("Error fetching recommended:", err);
+         setRecommendedPosts([]);
        }
     };
 
@@ -133,7 +117,7 @@ export default function BlogPost() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className={`flex flex-wrap items-center gap-6 text-sm font-mono ${theme === 'light' ? 'text-black/60' : 'text-white/60'}`}
+          className={`flex flex-wrap items-center gap-6 text-sm font-mono ${theme === 'light' ? 'text-nomad-green font-bold' : 'text-white/60'}`}
         >
           <div className="flex items-center gap-2">
             <User className="w-4 h-4" />

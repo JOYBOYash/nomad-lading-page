@@ -22,7 +22,6 @@ import { db } from "../lib/firebase";
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import { BlogPost } from "../types/blog";
 import { formatImageUrl } from "../lib/utils";
-import { FALLBACK_BLOGS } from "../lib/fallbackBlogs";
 import { useAppContext } from "../context/AppContext";
 import assets from "../config/assets.json";
 import { useCountdown } from "./Countdown";
@@ -126,7 +125,7 @@ export function NavPanelContent({
     const fetchLatestPosts = async () => {
       try {
         if (!db) {
-          setPosts(FALLBACK_BLOGS);
+          setPosts([]);
           return;
         }
         const q = query(
@@ -140,14 +139,10 @@ export function NavPanelContent({
           fetchedPosts.push({ id: doc.id, ...doc.data() } as BlogPost);
         });
         
-        if (fetchedPosts.length > 0) {
-          setPosts(fetchedPosts);
-        } else {
-          setPosts(FALLBACK_BLOGS);
-        }
+        setPosts(fetchedPosts);
       } catch (error) {
-        console.error("Error fetching latest posts for ticker, using local cache:", error);
-        setPosts(FALLBACK_BLOGS);
+        console.error("Error fetching latest posts for ticker:", error);
+        setPosts([]);
       }
     };
     fetchLatestPosts();
