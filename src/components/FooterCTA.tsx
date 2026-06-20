@@ -118,15 +118,21 @@ export default function FooterCTA() {
           createdAt: serverTimestamp(),
         });
 
-        // Call our backend API to send the confirmation email
+        // Call our backend API to send the confirmation email and verify the reCAPTCHA token
         try {
           const res = await fetch("/api/send-email", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, email: formattedEmail, role }),
+            body: JSON.stringify({ 
+              name, 
+              email: formattedEmail, 
+              role, 
+              recaptchaToken: recaptchaValue 
+            }),
           });
           if (!res.ok) {
-            console.warn("Failed to send welcome email via API");
+            const data = await res.json().catch(() => ({}));
+            console.warn("Failed to send welcome email or verify reCAPTCHA via API:", data.error || res.statusText);
           }
         } catch (emailErr) {
           console.error("Email API failed", emailErr);
