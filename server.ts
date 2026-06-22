@@ -9,10 +9,8 @@ dotenv.config();
 
 // Helper to verify reCAPTCHA Enterprise tokens
 async function verifyRecaptchaToken(token: string) {
-  const projectID = process.env.RECAPTCHA_PROJECT_ID || "medic-all-apk";
-  const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "6Ld8KhktAAAAAAw0p0R9jesucbkyEzz8scf10lou";
-
-  console.log(`[reCAPTCHA Backend] Verifying token for siteKey: ${recaptchaKey}, projectID: ${projectID}`);
+  const projectID = process.env.RECAPTCHA_PROJECT_ID;
+  const recaptchaKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
 
   try {
     const client = new RecaptchaEnterpriseServiceClient();
@@ -41,6 +39,11 @@ async function verifyRecaptchaToken(token: string) {
     }
 
     console.log(`[reCAPTCHA Backend] Assessment successful. Score: ${response.riskAnalysis?.score}`);
+    if (response.riskAnalysis && response.riskAnalysis.reasons) {
+      response.riskAnalysis.reasons.forEach((reason) => {
+        console.log(`[reCAPTCHA Reason] ${reason}`);
+      });
+    }
     return { success: true, score: response.riskAnalysis?.score };
 
   } catch (error: any) {
@@ -81,22 +84,23 @@ async function startServer() {
         return res.status(400).json({ error: "Name and email are required" });
       }
 
-      // Verify reCAPTCHA token if provided
-      if (recaptchaToken) {
+      // Verify reCAPTCHA token
+      const hasRecaptchaConfigured = !!(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
+      if (hasRecaptchaConfigured) {
+        if (!recaptchaToken) {
+          console.warn("[reCAPTCHA Backend] Request rejected: missing reCAPTCHA token.");
+          return res.status(400).json({ 
+            error: "reCAPTCHA verification failed", 
+            reason: "Missing reCAPTCHA token. Please check the checkbox." 
+          });
+        }
+
         const verification = await verifyRecaptchaToken(recaptchaToken);
         if (!verification.success) {
           return res.status(400).json({ 
             error: "reCAPTCHA verification failed", 
             reason: verification.reason 
           });
-        }
-      } else {
-        // Enforce reCAPTCHA if a key is configured
-        const hasRecaptchaConfigured = !!(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
-        if (hasRecaptchaConfigured) {
-          console.warn("[reCAPTCHA Backend] Request received without reCAPTCHA token but site key is configured.");
-          // We can optionally block requests without tokens, or let it pass for normal development.
-          // Let's log a warning or require it if we want full protection.
         }
       }
 

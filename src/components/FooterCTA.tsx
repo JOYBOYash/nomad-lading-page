@@ -107,7 +107,31 @@ export default function FooterCTA() {
 
       const formattedEmail = email.toLowerCase().trim();
 
-      // Check if email already exists using document ID
+      // 1. FIRST call our backend API to verify the reCAPTCHA token and send the confirmation email
+      try {
+        const res = await fetch("/api/send-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            name, 
+            email: formattedEmail, 
+            role, 
+            recaptchaToken: recaptchaValue 
+          }),
+        });
+
+        if (!res.ok) {
+          const data = await res.json().catch(() => ({}));
+          throw new Error(data.error || "reCAPTCHA verification or server email processing failed.");
+        }
+      } catch (backendErr: any) {
+        console.error("Backend verification failed:", backendErr);
+        setStatus("error");
+        setErrorMessage(backendErr.message || "reCAPTCHA verification or server processing failed.");
+        return;
+      }
+
+      // 2. Only if the backend verify succeeded, we proceed to add to waitlist in Firestore
       const waitlistDocRef = doc(db, "waitlist", formattedEmail);
 
       try {
@@ -117,26 +141,6 @@ export default function FooterCTA() {
           role,
           createdAt: serverTimestamp(),
         });
-
-        // Call our backend API to send the confirmation email and verify the reCAPTCHA token
-        try {
-          const res = await fetch("/api/send-email", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
-              name, 
-              email: formattedEmail, 
-              role, 
-              recaptchaToken: recaptchaValue 
-            }),
-          });
-          if (!res.ok) {
-            const data = await res.json().catch(() => ({}));
-            console.warn("Failed to send welcome email or verify reCAPTCHA via API:", data.error || res.statusText);
-          }
-        } catch (emailErr) {
-          console.error("Email API failed", emailErr);
-        }
       } catch (docError: any) {
         if (docError.code === "permission-denied") {
           // If update fails because they already exist
